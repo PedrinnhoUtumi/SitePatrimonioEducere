@@ -173,6 +173,8 @@ export default function AdcionaBem() {
                 name="dataAquisicao"
                 value={form.data_Aquisicao}
                 onChange={handleChange}
+                min="1997-10-01"
+                max={new Date().toISOString().split("T")[0]}
                 type="date"
                 className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
                 />
@@ -184,6 +186,8 @@ export default function AdcionaBem() {
                 name="dataBaixa"
                 value={form.data_Baixa}
                 onChange={handleChange}
+                min="1997-10-01"
+
                 type="date"
                 className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
                 />
