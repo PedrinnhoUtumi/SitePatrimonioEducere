@@ -1,0 +1,166 @@
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+-- 2) função para manter updated_at atualizada
+CREATE OR REPLACE FUNCTION set_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 3) Tabela users
+CREATE TABLE IF NOT EXISTS public.users (
+  id_user UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  cpf VARCHAR(14) NOT NULL UNIQUE,
+  rg VARCHAR(20),
+  email VARCHAR(255) NOT NULL UNIQUE,
+  nome VARCHAR(255) NOT NULL,
+  senha_hash VARCHAR(255) NOT NULL, -- armazene hash, não senha em texto
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+DROP TRIGGER IF EXISTS trg_users_updated_at ON public.users;
+CREATE TRIGGER trg_users_updated_at
+BEFORE UPDATE ON public.users
+FOR EACH ROW
+EXECUTE FUNCTION set_updated_at();
+
+-- 4) Tabela sala
+CREATE TABLE IF NOT EXISTS public.sala (
+  id_sala UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  nome_sala VARCHAR(150) NOT NULL,
+  tipo_sala VARCHAR(80),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+DROP TRIGGER IF EXISTS trg_sala_updated_at ON public.sala;
+CREATE TRIGGER trg_sala_updated_at
+BEFORE UPDATE ON public.sala
+FOR EACH ROW
+EXECUTE FUNCTION set_updated_at();
+
+-- 5) Tabela bem (assets)
+CREATE TABLE IF NOT EXISTS public.bem (
+  id_bem UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  categoria VARCHAR(100) NOT NULL,
+  descricao_do_bem varchar(200),
+  data_aquisicao TIMESTAMPTZ NOT NULL,
+  data_baixa TIMESTAMPTZ,
+  justificativa_baixa TEXT,
+  depreciacao_percent NUMERIC(5,2),
+  valor_aquisicao NUMERIC(12,2) NOT NULL DEFAULT 0.00,
+  valor_residual NUMERIC(12,2) NOT NULL DEFAULT 0.00,
+  marca VARCHAR(150),
+  localizacao_text VARCHAR(255),
+  id_sala UUID REFERENCES public.sala(id_sala) ON DELETE SET NULL,
+  modelo VARCHAR(150),
+  estado_conservacao VARCHAR(80),
+  id_user_responsavel UUID REFERENCES public.users(id_user) ON DELETE SET NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+DROP TRIGGER IF EXISTS trg_bem_updated_at ON public.bem;
+CREATE TRIGGER trg_bem_updated_at
+BEFORE UPDATE ON public.bem
+FOR EACH ROW
+EXECUTE FUNCTION set_updated_at();
+
+-- 6) Tabela salas_reservadas (reservations)
+CREATE TABLE IF NOT EXISTS public.salas_reservadas (
+  id_reserva UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_sala UUID NOT NULL REFERENCES public.sala(id_sala) ON DELETE CASCADE,
+  responsavel_id UUID REFERENCES public.users(id_user) ON DELETE SET NULL,
+  data_inicio TIMESTAMPTZ NOT NULL,
+  data_fim TIMESTAMPTZ NOT NULL,
+  descricao TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  CONSTRAINT chk_data_fim_ge_data_inicio CHECK (data_fim >= data_inicio)
+);
+
+DROP TRIGGER IF EXISTS trg_reserva_updated_at ON public.salas_reservadas;
+CREATE TRIGGER trg_reserva_updated_at
+BEFORE UPDATE ON public.salas_reservadas
+FOR EACH ROW
+EXECUTE FUNCTION set_updated_at();
+
+-- 7) Índices úteis
+CREATE INDEX IF NOT EXISTS idx_users_email ON public.users(email);
+CREATE INDEX IF NOT EXISTS idx_users_cpf ON public.users(cpf);
+CREATE INDEX IF NOT EXISTS idx_bem_categoria ON public.bem(categoria);
+CREATE INDEX IF NOT EXISTS idx_bem_id_sala ON public.bem(id_sala);
+CREATE INDEX IF NOT EXISTS idx_reserva_periodo ON public.salas_reservadas (id_sala, data_inicio, data_fim);
+
+-- 8) Dados de exemplo
+-- Users
+INSERT INTO public.users (cpf, rg, email, nome, senha_hash)
+VALUES
+  ('000.000.000-00','12.345.678-9','admin@example.com','Administrador','$2b$12$exemploHash')
+ON CONFLICT (email) DO NOTHING;
+
+INSERT INTO public.users (cpf, rg, email, nome, senha_hash)
+VALUES
+  ('111.111.111-11','98.765.432-1','joao@example.com','João Silva','$2b$12$exemploHash2')
+ON CONFLICT (email) DO NOTHING;
+
+-- Salas
+INSERT INTO public.sala (nome_sala, tipo_sala)
+VALUES
+  ('Sala 001 (Administrativo)','Administrativa'),
+  ('Auditório Principal','Auditório')
+ON CONFLICT DO NOTHING;
+
+-- Bens (associando à primeira sala e ao usuário admin)
+-- Para garantir referência correta, recuperamos ids via subquery
+WITH u AS (SELECT id_user FROM public.users WHERE email = 'admin@example.com' LIMIT 1),
+     s AS (SELECT id_sala FROM public.sala WHERE nome_sala LIKE 'Sala 001%' LIMIT 1)
+INSERT INTO public.bem (categoria, descricao_do_bem, data_aquisicao, valor_aquisicao, marca, localizacao_text, id_sala, modelo, estado_conservacao, id_user_responsavel)
+SELECT 'Roupas','Uniforme Corinthians', '1995-05-05T09:00:00Z'::timestamptz, 15.90, 'Corinthians', 'Sala 001 (Administrativo)', s.id_sala, 'Modelo A', 'Usado recente', u.id_user
+FROM u, s
+ON CONFLICT DO NOTHING;
+
+WITH u AS (SELECT id_user FROM public.users WHERE email = 'admin@example.com' LIMIT 1),
+     s AS (SELECT id_sala FROM public.sala WHERE nome_sala LIKE 'Sala 001%' LIMIT 1)
+INSERT INTO public.bem (categoria, descricao_do_bem, data_aquisicao, valor_aquisicao, marca, localizacao_text, id_sala, modelo, estado_conservacao, id_user_responsavel)
+SELECT 'Eletrodomésticos','Liquidificador XYZ', '2025-08-29T10:30:00Z'::timestamptz, 120.00, 'MarcaX', 'Sala 001 (Administrativo)', s.id_sala, 'LX-200', 'Usado', u.id_user
+FROM u, s
+ON CONFLICT DO NOTHING;
+
+-- Reservas de exemplo
+WITH s AS (SELECT id_sala FROM public.sala WHERE nome_sala LIKE 'Sala 001%' LIMIT 1),
+     u AS (SELECT id_user FROM public.users WHERE email = 'joao@example.com' LIMIT 1)
+INSERT INTO public.salas_reservadas (id_sala, responsavel_id, data_inicio, data_fim, descricao)
+SELECT s.id_sala, u.id_user, '2025-09-10T09:00:00Z'::timestamptz, '2025-09-10T11:00:00Z'::timestamptz, 'Reunião trimestral'
+FROM s, u
+ON CONFLICT DO NOTHING;
+
+WITH s AS (SELECT id_sala FROM public.sala WHERE nome_sala LIKE 'Auditório%' LIMIT 1),
+     u AS (SELECT id_user FROM public.users WHERE email = 'admin@example.com' LIMIT 1)
+INSERT INTO public.salas_reservadas (id_sala, responsavel_id, data_inicio, data_fim, descricao)
+SELECT s.id_sala, u.id_user, '2025-09-15T14:00:00Z'::timestamptz, '2025-09-15T16:00:00Z'::timestamptz, 'Palestra de segurança'
+FROM s, u
+ON CONFLICT DO NOTHING;
+
+-- 9) Consultas úteis (exemplos)
+-- 9.1 Buscar bens por sala (troque :id_sala)
+-- SELECT * FROM public.bem WHERE id_sala = :id_sala ORDER BY data_aquisicao DESC;
+
+-- 9.2 Buscar reservas que colidem com um intervalo (usado para checagem)
+-- SELECT * FROM public.salas_reservadas
+-- WHERE id_sala = :id_sala AND data_inicio < :novo_data_fim AND data_fim > :novo_data_inicio;
+
+-- 9.3 Buscar bens por responsável (troque :id_user)
+-- SELECT * FROM public.bem WHERE id_user_responsavel = :id_user ORDER BY created_at DESC;
+
+-- 9.4 Total do valor de aquisição por sala
+-- SELECT id_sala, SUM(valor_aquisicao) AS total_valor
+-- FROM public.bem
+-- GROUP BY id_sala;
+
+-- 9.5 Bens baixados em um período
+-- SELECT * FROM public.bem WHERE data_baixa IS NOT NULL AND data_baixa BETWEEN :inicio AND :fim;
+
+-- FIM do script

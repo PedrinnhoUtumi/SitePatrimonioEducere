@@ -1,0 +1,26 @@
+{
+  "name": "sitepatrimonio",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix back\" \"npm run dev --prefix front\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brunpena/SitePatrimonio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brunpena/SitePatrimonio/issues"
+  },
+  "homepage": "https://github.com/brunpena/SitePatrimonio#readme",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "dependencies": {
+    "uuid": "^13.0.0"
+  }
+}

@@ -1,0 +1,192 @@
+-- Inserindo 5 funcionários de exemplo
+INSERT INTO "Seller"
+  ("Cpf",       "Name",         "Cellphone",    "Address",                  "BankAccnt",     "BloodType", "ObjectFamilyData",                           "Function",      "Mail",                   "Linkedin",                         "Instagram",      "EntryDay",  "PayDay")
+VALUES
+  ('123.456.789-00','Ana Souza',  '+55 (11) 91234-5678','Av. Paulista, 1000, São Paulo, SP','001122-3',      'O+',        '{"spouse":"Carlos Souza","children":["Luiza","Pedro"]}', 'Gerente Vendas','ana.souza@vivare.com',   'https://linkedin.com/in/anasouza','@anasouza',      '2022-03-15','2022-03-30'),
+  ('987.654.321-11','Bruno Lima', '+55 (21) 99876-5432','Rua das Flores, 200, Rio de Janeiro, RJ','004455-6', 'A−',        '{"spouse":null,"children":[]}',                     'Assistente RH', 'bruno.lima@vivare.com',   'https://linkedin.com/in/brunolima','@brunolima',      '2023-01-10','2023-01-31'),
+  ('111.222.333-44','Carla Dias', '+55 (31) 93456-7890','Praça da Liberdade, 150, Belo Horizonte, MG','007788-9','B+',        '{"spouse":"Mariana Dias","children":["Lucas"]}',        'Analista TI',    'carla.dias@vivare.com',  'https://linkedin.com/in/carladias','@carladias',     '2021-11-05','2021-11-30'),
+  ('555.666.777-88','Daniel Alves','+55 (41) 91567-1234','Av. Batel, 300, Curitiba, PR','010101-1',     'AB+',       '{"spouse":"Fernanda Alves","children":["Gabriel","Rita"]}','Coordenador Marketing','daniel.alves@vivare.com','https://linkedin.com/in/danielalves','@danielalves','2020-06-20','2020-06-30'),
+  ('999.888.777-66','Eduarda Melo','+55 (51) 92468-2345','Rua XV de Novembro, 400, Porto Alegre, RS','020202-2','O−',        '{"spouse":null,"children":[]}',                     'Diretora Financeira','eduarda.melo@vivare.com','https://linkedin.com/in/eduardamelo','@eduardamelo','2019-09-01','2019-09-30');
+
+
+-- 1) Tabela de carros
+CREATE TABLE "Car" (
+  "CarId"        SERIAL PRIMARY KEY,
+  "CodCar"       INTEGER     NOT NULL,
+  "Brand"        TEXT        NOT NULL,
+  "Name"         TEXT        NOT NULL,
+  "Value"        NUMERIC(12,2),
+  "Year"         INTEGER,
+  "YearModel"    INTEGER,
+  "Km"           INTEGER,
+  "Tracting"     TEXT,
+  "Door"         INTEGER, 
+  "Bodywork"     TEXT,
+  "Plate"        TEXT,
+  "TypePlate"    TEXT,
+  "Cambium"      TEXT,
+  "Fuel"         TEXT,
+  "Description"  TEXT,
+  "Color"        TEXT,
+  "ObjectImage"  TEXT    -- URL ou JSON com paths
+);
+
+-- 2) Tabela de opções
+CREATE TABLE "Options" (
+  "OptionsId"     SERIAL PRIMARY KEY,
+  "ObjectOptions" TEXT    -- JSON ou texto descritivo da opção
+);
+
+-- 3) Relacionamento Car ↔ Options (N:N)
+CREATE TABLE "carToOptions" (
+  "RowId"      SERIAL PRIMARY KEY,
+  "CarId"      INTEGER NOT NULL REFERENCES "Car"("CarId")    ON DELETE CASCADE,
+  "OptionsId"  INTEGER NOT NULL REFERENCES "Options"("OptionsId") ON DELETE CASCADE,
+  UNIQUE ("CarId","OptionsId")
+);
+
+-- 4) Tabela de vendedores
+CREATE TABLE "Seller" (
+  "SellerId"         SERIAL PRIMARY KEY,
+  "Cpf"              TEXT,
+  "Name"             TEXT,
+  "Cellphone"        TEXT,
+  "Address"          TEXT,
+  "BankAccnt"        TEXT,
+  "BloodType"        TEXT,
+  "ObjectFamilyData" TEXT,   -- JSON com dados da família
+  "Function"         TEXT,
+  "Mail"             TEXT,
+  "Linkedin"         TEXT,
+  "Instagram"        TEXT,
+  "EntryDay"         DATE,
+  "PayDay"           DATE
+);
+
+-- 5) Relacionamento Car ↔ Seller (N:N)
+CREATE TABLE "carToSeller" (
+  "RowId"    SERIAL PRIMARY KEY,
+  "CarId"    INTEGER NOT NULL REFERENCES "Car"("CarId")     ON DELETE CASCADE,
+  "SellerId" INTEGER NOT NULL REFERENCES "Seller"("SellerId") ON DELETE CASCADE,
+  UNIQUE ("CarId","SellerId")
+);
+
+-- 6) Tabela de dados da Vivare
+CREATE TABLE "VivareData" (
+  "VivareId"         SERIAL PRIMARY KEY,
+  "Instagram"       TEXT,
+  "Facebook"        TEXT,
+  "Mail"            TEXT,
+  "Tour"            TEXT,
+  "Address"         TEXT,
+  "Phone"           TEXT,
+  "PresentationText" TEXT
+);
+
+-- 7) Tabela de usuários da Vivare
+CREATE TABLE "UserVivare" (
+  "UserId"     SERIAL PRIMARY KEY,
+  "Mail"       TEXT    UNIQUE NOT NULL,
+  "Password"   TEXT    NOT NULL,
+  "Name"       TEXT,
+  "Function"   TEXT
+);
+
+CREATE TABLE "Highlight" (
+  "HighlightId"   UUID    PRIMARY KEY DEFAULT gen_random_uuid(),
+  "CarId"         INTEGER,
+  "CarName"       TEXT,
+  "CarDescription" TEXT,
+  "Year"          INTEGER,
+  "YearModel"     INTEGER,  
+  "Value"         INTEGER,
+  "ObjectImageCar"   TEXT
+);
+
+
+CREATE TABLE "Car" (
+  "CarId"        SERIAL PRIMARY KEY,
+  "CodCar"       INTEGER     NOT NULL,
+  "Brand"        TEXT        NOT NULL,
+  "Name"         TEXT        NOT NULL,
+  "Value"        NUMERIC(12,2),
+  "Year"         INTEGER,
+  "YearModel"    INTEGER,
+  "Km"           INTEGER,
+  "Tracting"     TEXT,
+  "Door"         INTEGER, 
+  "Bodywork"     TEXT,
+  "Plate"        TEXT,
+  "TypePlate"    TEXT,
+  "Cambium"      TEXT,
+  "Fuel"         TEXT,
+  "Description"  TEXT,
+  "Color"        TEXT,
+  "ObjectImage"  TEXT    -- URL ou JSON com paths
+);
+
+INSERT INTO "Car" 
+  ("CodCar","Brand", "Name", "Value", "Year", "YearModel", "Km", "Tracting", "Door", "Bodywork", "Plate", "TypePlate", "Cambium", "Fuel", "Description", "Color", "ObjectImage")
+VALUES
+(123,'Toyota', 'Corolla GLi', 95000, 2020, 2021, 30000, 'FWD', 4, 'Sedan', 'ABC-1234', 'Mercosul', 'Automatic', 'Flex', 'Bem conservado, único dono.', 'Prata', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(124,'Honda', 'Civic EX', 110000, 2019, 2020, 40000, 'FWD', 4, 'Sedan', 'DEF-5678', 'Mercosul', 'Automatic', 'Flex', 'Revisões em dia.', 'Preto', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(125,'Volkswagen', 'Golf TSI', 80000, 2017, 2018, 60000, 'FWD', 4, 'Hatch', 'GHI-9012', 'Mercosul', 'Automatic', 'Gasolina', 'Ótimo estado.', 'Branco', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(126,'Ford', 'Ka SE', 45000, 2018, 2018, 50000, 'FWD', 4, 'Hatch', 'JKL-3456', 'Mercosul', 'Manual', 'Flex', 'Ideal para cidade.', 'Vermelho', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(127,'Chevrolet', 'Onix LT', 60000, 2019, 2019, 30000, 'FWD', 4, 'Hatch', 'MNO-7890', 'Mercosul', 'Manual', 'Flex', 'Econômico.', 'Cinza', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(128,'Hyundai', 'HB20 Comfort', 55000, 2017, 2018, 45000, 'FWD', 4, 'Hatch', 'PQR-2345', 'Mercosul', 'Manual', 'Flex', 'Completo.', 'Azul', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(129,'Renault', 'Kwid Zen', 48000, 2020, 2021, 20000, 'FWD', 4, 'Hatch', 'STU-6789', 'Mercosul', 'Manual', 'Flex', 'IPVA pago.', 'Laranja', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(120,'Jeep', 'Compass Sport', 140000, 2021, 2021, 15000, '4WD', 4, 'SUV', 'VWX-1122', 'Mercosul', 'Automatic', 'Flex', 'Semi novo.', 'Branco', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(121,'Nissan', 'Kicks SL', 95000, 2019, 2020, 25000, 'FWD', 4, 'SUV', 'YZA-3344', 'Mercosul', 'Automatic', 'Flex', 'Bem equipado.', 'Prata', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(122,'Peugeot', '208 Allure', 70000, 2020, 2021, 15000, 'FWD', 4, 'Hatch', 'BCD-5566', 'Mercosul', 'Automatic', 'Flex', 'Design moderno.', 'Vermelho', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(130,'Fiat', 'Argo Drive', 58000, 2018, 2019, 35000, 'FWD', 4, 'Hatch', 'EFG-7788', 'Mercosul', 'Manual', 'Flex', 'Ótima opção.', 'Branco', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(131,'Ford', 'EcoSport FreeStyle', 75000, 2017, 2018, 50000, 'FWD', 4, 'SUV', 'HIJ-9900', 'Mercosul', 'Automatic', 'Flex', 'SUV compacto.', 'Preto', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(132,'Chevrolet', 'Spin LTZ', 67000, 2016, 2017, 70000, 'FWD', 4, 'Minivan', 'KLM-1122', 'Mercosul', 'Automatic', 'Flex', 'Ideal para família.', 'Prata', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(133,'Toyota', 'Yaris XL', 75000, 2019, 2020, 30000, 'FWD', 4, 'Hatch', 'NOP-3344', 'Mercosul', 'Automatic', 'Flex', 'Completo.', 'Cinza', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(134,'Honda', 'Fit EX', 68000, 2017, 2018, 55000, 'FWD', 4, 'Hatch', 'QRS-5566', 'Mercosul', 'Automatic', 'Flex', 'Econômico.', 'Azul', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(135,'Mitsubishi', 'ASX AWD', 85000, 2016, 2017, 80000, 'AWD', 4, 'SUV', 'TUV-7788', 'Mercosul', 'Automatic', 'Gasolina', 'Completo.', 'Branco', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(136,'Fiat', 'Toro Freedom', 105000, 2020, 2021, 20000, '4WD', 4, 'Pickup', 'XYZ-9900', 'Mercosul', 'Automatic', 'Diesel', 'Perfeita para trabalho.', 'Prata', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(137,'Volkswagen', 'T-Cross Comfortline', 125000, 2021, 2021, 10000, 'FWD', 4, 'SUV', 'ABC-1122', 'Mercosul', 'Automatic', 'Flex', 'Único dono.', 'Preto', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(138,'Ford', 'Ranger XLS', 150000, 2022, 2022, 5000, '4WD', 4, 'Pickup', 'DEF-3344', 'Mercosul', 'Automatic', 'Diesel', 'Nova, baixo km.', 'Branco', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(139,'Hyundai', 'Creta Prestige', 120000, 2020, 2021, 20000, 'FWD', 4, 'SUV', 'GHI-5566', 'Mercosul', 'Automatic', 'Flex', 'Top de linha.', 'Prata', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(140,'Renault', 'Duster Iconic', 105000, 2021, 2022, 15000, '4WD', 4, 'SUV', 'JKL-7788', 'Mercosul', 'Automatic', 'Flex', 'IPVA pago.', 'Cinza', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(141,'Chevrolet', 'Tracker Premier', 130000, 2022, 2022, 5000, 'FWD', 4, 'SUV', 'MNO-9900', 'Mercosul', 'Automatic', 'Flex', 'Semi novo.', 'Azul', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(142,'Toyota', 'Hilux SRV', 210000, 2021, 2022, 10000, '4WD', 4, 'Pickup', 'PQR-1122', 'Mercosul', 'Automatic', 'Diesel', 'Perfeita para trabalho pesado.', 'Branco', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(143,'Nissan', 'Frontier LE', 190000, 2020, 2021, 20000, '4WD', 4, 'Pickup', 'STU-3344', 'Mercosul', 'Automatic', 'Diesel', 'Pronta para estrada.', 'Preto', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(144,'Jeep', 'Renegade Longitude', 115000, 2021, 2022, 15000, 'FWD', 4, 'SUV', 'VWX-5566', 'Mercosul', 'Automatic', 'Flex', 'Design robusto.', 'Vermelho', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(145,'Honda', 'HR-V EXL', 125000, 2021, 2022, 10000, 'FWD', 4, 'SUV', 'YZA-7788', 'Mercosul', 'Automatic', 'Flex', 'Completo.', 'Cinza', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(146,'Peugeot', '3008 Griffe', 160000, 2021, 2022, 8000, 'FWD', 4, 'SUV', 'BCD-9900', 'Mercosul', 'Automatic', 'Gasolina', 'Luxuoso.', 'Branco', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(147,'Volkswagen', 'Virtus Comfortline', 90000, 2019, 2020, 30000, 'FWD', 4, 'Sedan', 'EFG-1122', 'Mercosul', 'Automatic', 'Flex', 'Sedan moderno.', 'Preto', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(148,'Ford', 'Fusion Titanium', 120000, 2018, 2019, 40000, 'AWD', 4, 'Sedan', 'HIJ-3344', 'Mercosul', 'Automatic', 'Híbrido', 'Conforto premium.', 'Cinza', '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}');
+
+
+
+
+
+INSERT INTO "Highlight" 
+  ("HighlightId", "CarId", "CarName", "CarDescription", "Year", "YearModel", "Value", "ObjectImageCar")
+VALUES
+(gen_random_uuid(), 1, 'Corolla GLi', 'Sedan confortável, único dono, revisões em dia.', 2020, 2021, 95000, '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(gen_random_uuid(), 2, 'Civic EX', 'Modelo espaçoso e econômico, ótima manutenção.', 2019, 2020, 110000, '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(gen_random_uuid(), 3, 'Golf TSI', 'Hatch premium, esportivo e econômico.', 2017, 2018, 80000, '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(gen_random_uuid(), 4, 'Ka SE', 'Carro compacto, ideal para cidade.', 2018, 2018, 45000, '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(gen_random_uuid(), 5, 'Onix LT', 'Hatch moderno, manutenção em dia.', 2019, 2019, 60000, '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(gen_random_uuid(), 6, 'HB20 Comfort', 'Completo, muito bem conservado.', 2017, 2018, 55000, '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}');
+
+
+
+
+
+
+
+
+INSERT INTO "Highlight" 
+  ("HighlightId", "CarId", "CarName", "CarDescription", "Year", "YearModel", "Value", "ObjectImageCar")
+VALUES
+(gen_random_uuid(), 1, 'Corolla GLi', 'Sedan confortável, único dono, revisões em dia.', 2020, 2021, 95000, '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(gen_random_uuid(), 2, 'Civic EX', 'Modelo espaçoso e econômico, ótima manutenção.', 2019, 2020, 110000, '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(gen_random_uuid(), 3, 'Golf TSI', 'Hatch premium, esportivo e econômico.', 2017, 2018, 80000, '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(gen_random_uuid(), 4, 'Ka SE', 'Carro compacto, ideal para cidade.', 2018, 2018, 45000, '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(gen_random_uuid(), 5, 'Onix LT', 'Hatch moderno, manutenção em dia.', 2019, 2019, 60000, '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}'),
+(gen_random_uuid(), 6, 'HB20 Comfort', 'Completo, muito bem conservado.', 2017, 2018, 55000, '{"url":"https://imgs.search.brave.com/suApFIrByhaFrsYcunMFgW28uXYL-xK3n52RD3Sv_E8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI0/NTQwNzY1OC9waG90/by9kb2hhLXFhdGFy/LW5leW1hci1vZi1i/cmF6aWwtY2VsZWJy/YXRlcy1kdXJpbmct/dGhlLWZpZmEtd29y/bGQtY3VwLXFhdGFy/LTIwMjItcm91bmQt/b2YtMTYtbWF0Y2gu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW5EZUFuc0M2dnJv/MlduNXhaVlEtTUJU/ZDhOQ0dRY2R1N3hN/OE1xaURHSUU9"}');
+
+
