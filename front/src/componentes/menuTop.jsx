@@ -4,11 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function MenuTop() {
     const [menuOpen, setMenuOpen] = useState(false);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const user = JSON.parse(localStorage.getItem("user"));
-    const userType = user?.type || "Visualizador"; 
-    const userName = user?.nome || "Erro"
+    const userType = user?.type || "Visualizador";
+    const userName = user?.nome || "Erro";
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -19,69 +19,46 @@ export default function MenuTop() {
     return (
         <header className="w-full bg-gray-900 text-white shadow-[0_2px_6px_rgba(0,0,0,0.15)] relative z-50">
             <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-                
-                <button
-                    className="md:hidden p-2"
-                    onClick={() => setMenuOpen(!menuOpen)}
-                >
+                <h1 className="text-lg font-bold tracking-wide">Controle Patrimonial</h1>
+
+                <button className="md:hidden p-2" onClick={() => setMenuOpen(!menuOpen)}>
                     {menuOpen ? <X size={28} /> : <Menu size={28} />}
                 </button>
 
-                <h1 className="text-lg font-bold tracking-wide 
-                            md:static md:translate-x-0 
-                            absolute left-1/2 -translate-x-1/2 md:left-0">
-                    Controle Patrimonial
-                </h1>
-
                 <nav className="hidden md:flex items-center gap-6">
-                    <Link to="/bens" className="hover:text-indigo-400 transition"><Archive/></Link>
-                    <Link to="/salas" className="hover:text-indigo-400 transition"><Calendar/></Link>
+                    <Link to="/bens" className="hover:text-indigo-400 transition" title="Bens"><Archive /></Link>
+                    <Link to="/salas" className="hover:text-indigo-400 transition" title="Salas"><Calendar /></Link>
                     {userType === "Administrador" && (
-                        <Link to="/cadastro" className="hover:text-indigo-400 transition"><UserPlus2/></Link>
+                        <Link to="/cadastro" className="hover:text-indigo-400 transition" title="Cadastro"><UserPlus2 /></Link>
                     )}
-                    <button onClick={handleLogout} className="hover:text-indigo-400 transition"><LogOutIcon/></button>
-                    <div className="flex items-center gap-4 p-4 w-full max-w-md rounded-xl shadow-md bg-gray-900 text-blue-600">
-                        <div className="text-blue-600 bg-blue-100 rounded-full">
-                            <CircleUserIcon size={32} />
-                        </div>
-                        <span className="text-lg font-semibold">{userName}</span>
+                    <button onClick={handleLogout} className="hover:text-indigo-400 transition" title="Sair"><LogOutIcon /></button>
+
+                    <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-gray-800 text-blue-300">
+                        <CircleUserIcon size={28} />
+                        <span className="text-sm font-medium">{userName}</span>
                     </div>
                 </nav>
-            </div>  
+            </div>
 
             {menuOpen && (
-                <nav className="md:hidden bg-gray-800 flex flex-col items-center gap-4 py-4">
-                    <Link 
-                        to="/bens" 
-                        className="hover:text-indigo-400 transition" 
-                        onClick={() => setMenuOpen(false)}
-                    >
-                        Bens
+                <nav className="md:hidden bg-gray-800 flex flex-col items-center gap-4 py-6 px-4 text-center">
+                    <Link to="/bens" onClick={() => setMenuOpen(false)} className="hover:text-indigo-400 transition text-lg font-medium">
+                        <div className="flex items-center gap-2"><Archive size={20} /> Bens</div>
                     </Link>
-                    <Link 
-                        to="/salas" 
-                        className="hover:text-indigo-400 transition" 
-                        onClick={() => setMenuOpen(false)}
-                    >
-                        Salas Reservadas
+                    <Link to="/salas" onClick={() => setMenuOpen(false)} className="hover:text-indigo-400 transition text-lg font-medium">
+                        <div className="flex items-center gap-2"><Calendar size={20} /> Salas</div>
                     </Link>
                     {userType === "Administrador" && (
-                        <Link 
-                            to="/cadastro" 
-                            className="hover:text-indigo-400 transition" 
-                            onClick={() => setMenuOpen(false)}
-                        >
-                            Cadastro
+                        <Link to="/cadastro" onClick={() => setMenuOpen(false)} className="hover:text-indigo-400 transition text-lg font-medium">
+                            <div className="flex items-center gap-2"><UserPlus2 size={20} /> Cadastro</div>
                         </Link>
                     )}
-                    <div>
-                        {userName}
+                    <div className="flex items-center gap-2 text-blue-300 mt-2">
+                        <CircleUserIcon size={24} />
+                        <span className="font-semibold">{userName}</span>
                     </div>
-                    <button 
-                        onClick={handleLogout} 
-                        className="hover:text-indigo-400 transition"
-                    >
-                        Sair
+                    <button onClick={handleLogout} className="hover:text-red-400 transition mt-2 text-sm">
+                        <LogOutIcon size={18} className="inline mr-1" /> Sair
                     </button>
                 </nav>
             )}

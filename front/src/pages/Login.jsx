@@ -15,7 +15,7 @@ export default function Login() {
     useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-        navigate("/bens", { replace: true }); // ← ESSENCIAL
+        navigate("/bens", { replace: true });
     }
     }, []);
 

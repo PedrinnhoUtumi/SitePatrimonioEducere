@@ -159,7 +159,7 @@ export default function SalasReservadasCalendar() {
     return (
         <div className="w-full">
         <div className="max-w-6xl mx-auto p-6">
-            <div className="flex items-center justify-between mb-4 gap-4 flex-wrap">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-4 gap-4">
             <div className="flex items-center gap-2">
                 <button className={`px-4 py-2 rounded ${mode==="dia"?"bg-sky-700 text-white":"bg-slate-100"}`} onClick={()=>setMode("dia")}>Dia (horas)</button>
                 <button className={`px-4 py-2 rounded ${mode==="semana"?"bg-sky-700 text-white":"bg-slate-100"}`} onClick={()=>setMode("semana")}>Semana</button>
@@ -170,7 +170,7 @@ export default function SalasReservadasCalendar() {
                 <input type="date" value={baseDate} onChange={(e)=>setBaseDate(e.target.value)} className="border rounded px-2 py-1" />
             </div>
 
-            <form onSubmit={handleCheck} className="flex items-center gap-2">
+            <form onSubmit={handleCheck} className="flex flex-wrap items-center gap-2">
                 <label className="text-sm">Verificar</label>
                 <input type="date" value={checkDate} onChange={(e)=>setCheckDate(e.target.value)} className="border px-2 py-1 rounded" />
                 <input type="time" value={checkTime} onChange={(e)=>setCheckTime(e.target.value)} className="border px-2 py-1 rounded" />
@@ -181,7 +181,7 @@ export default function SalasReservadasCalendar() {
             {checkResult && (
             <div className="mb-4">
                 <strong>Resultado da verificação ({checkDate} {checkTime}):</strong>
-                <div className="mt-2 grid grid-cols-2 gap-2">
+                <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {checkResult.map(r => (
                     <div key={r.salaKey} className={`p-2 rounded border ${r.occupied ? "bg-red-100 border-red-300" : "bg-green-50 border-green-200"}`}>
                     <div className="text-sm font-medium">{r.nome}</div>
@@ -274,7 +274,7 @@ export default function SalasReservadasCalendar() {
                         const dayEnd = new Date(d); dayEnd.setHours(23,59,59,999);
                         const reservasDoDia = sala.reservas.filter(r => r.start && r.end && overlap(r.start, r.end, dayStart, dayEnd));
                         return (
-                            <div key={d.toISOString()} className="p-2 border-l border-b h-28 w-36">
+                            <div key={d.toISOString()} className="p-2 border-l border-b h-28 w-full sm:w-36">
                             {reservasDoDia.length === 0 ? (
                                 <div className="text-xs text-slate-400">— livre —</div>
                             ) : (

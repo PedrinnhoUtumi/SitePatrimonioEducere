@@ -86,13 +86,13 @@ export default function AdcionaBem() {
             data_baixa: dateToISO(form.data_Baixa),
             justificativa_baixa: form.justificativaBaixa,
             depreciacao_percent: parseFloat(form.depreciacao),
-            valor_aquisicao: parseInt(form.valorAquisicao, 10),
-            valor_residual: parseInt(form.valorResidual, 10),
+            valor_aquisicao: parseFloat(form.valorAquisicao),
+            valor_residual: parseFloat(form.valorResidual),
             marca: form.marca,
-            localizacao_text: form.localizacaoText,
+            localizacao_text: form.localizacao_text,
             id_sala: form.id_sala || null,
             modelo: form.modelo,
-            estado_conservacao: form.estadoConservacao,
+            estado_conservacao: form.estado_conservacao,
             id_user_responsavel: form.idUserResponsavel || null,
             idQrCode: null 
         };
@@ -120,7 +120,7 @@ export default function AdcionaBem() {
             data_Aquisicao: "",
             data_Baixa: "",
             justificativaBaixa: "Transferência",
-            depreciacao: "0",
+            depreciacao: "",
             valorAquisicao: "",
             valorResidual: "",
             marca: "",
@@ -170,7 +170,7 @@ export default function AdcionaBem() {
             <div>
                 <label className="block text-sm font-medium text-gray-700">Data de aquisição</label>
                 <input
-                name="dataAquisicao"
+                name="data_Aquisicao"
                 value={form.data_Aquisicao}
                 onChange={handleChange}
                 min="1997-10-01"
@@ -183,10 +183,10 @@ export default function AdcionaBem() {
             <div>
                 <label className="block text-sm font-medium text-gray-700">Data da baixa</label>
                 <input
-                name="dataBaixa"
+                name="data_Baixa"
                 value={form.data_Baixa}
                 onChange={handleChange}
-                min="1997-10-01"
+                min={form.data_Aquisicao ? form.data_Aquisicao: new Date().toISOString().split("T")[0]}
 
                 type="date"
                 className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
@@ -261,7 +261,7 @@ export default function AdcionaBem() {
             <div>
                 <label className="block text-sm font-medium text-gray-700">Localização</label>
                 <select
-                name="localizacao"
+                name="localizacao_text"
                 value={form.localizacao_text}
                 onChange={handleChange}
                 className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
@@ -284,12 +284,13 @@ export default function AdcionaBem() {
             <div>
                 <label className="block text-sm font-medium text-gray-700">Estado de conservação</label>
                 <select
-                name="estado"
-                value={form.estado}
+                name="estado_conservacao"
+                value={form.estado_conservacao}
                 onChange={handleChange}
                 className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
                 >
-                <option>Novo</option>
+                <option>Novo</option>   
+                <option>Avariado</option>
                 </select>
             </div>
             </div>

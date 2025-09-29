@@ -13,7 +13,6 @@ export default function VerificaBem() {
     const [saving, setSaving] = useState(false);
     const [processingId, setProcessingId] = useState(null);
 
-    // detecta tipo do usuário (para mostrar ações apenas pra admin)
     const user = typeof window !== "undefined" ? JSON.parse(localStorage.getItem("user")) : null;
     const userType = user?.type ?? "Visualizador";
 
@@ -24,7 +23,6 @@ export default function VerificaBem() {
         if (!response.ok) throw new Error("Erro ao buscar os bens");
         const data = await response.json();
 
-        // filtra para exibir apenas bens cujo status != false
         const active = Array.isArray(data)
         ? data.filter((b) => !(b?.status === false || b?.status === "false"))
         : [];
@@ -78,66 +76,6 @@ export default function VerificaBem() {
         setEditingBem((prev) => ({ ...prev, [name]: value }));
     };
 
-    // const handleSave = async () => {
-    //     if (!editingBem) return;
-    //     setSaving(true);
-
-    //     try {
-    //     const id = editingBem.id_bem ?? editingBem.id;
-
-    //     const payload = {
-    //         categoria: editingBem.categoria,
-    //         descricao_do_bem: editingBem.descricao_do_bem,
-    //         marca: editingBem.marca,
-    //         modelo: editingBem.modelo,
-    //         localizacao_text: editingBem.localizacao_text,
-    //         valor_aquisicao: editingBem.valor_aquisicao ? Number(editingBem.valor_aquisicao) : null,
-    //         valor_residual: editingBem.valor_residual ? Number(editingBem.valor_residual) : null,
-    //         estado_conservacao: editingBem.estado_conservacao,
-    //         data_aquisicao: editingBem.data_aquisicao ? new Date(editingBem.data_aquisicao).toISOString() : null,
-    //         data_baixa: editingBem.data_baixa ? new Date(editingBem.data_baixa).toISOString() : null,
-    //         depreciacao_percent: editingBem.depreciacao_percent ? Number(editingBem.depreciacao_percent) : null,
-    //         justificativa_baixa: editingBem.justificativa_baixa,
-    //     };
-
-    //     const res = await fetch(`${CONFIG.API_URL}/bem/update/${id}`, {
-    //         method: "PUT",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify(payload),
-    //     });
-
-    //     if (!res.ok) {
-    //         const text = await res.text();
-    //         throw new Error(`Erro ao atualizar bem: ${res.status} ${text}`);
-    //     }
-
-    //     const updated = await res.json();
-    //     const updatedObj = Array.isArray(updated) ? updated[0] : updated;
-
-    //     // se o registro atualizado tem status === false, remove da lista
-    //     if (updatedObj && (updatedObj.status === false || updatedObj.status === "false")) {
-    //         setBens((prev) => prev.filter((b) => (b.id_bem ?? b.id) !== id));
-    //     } else {
-    //         // caso contrário, substitui o item na lista
-    //         setBens((prev) =>
-    //         prev.map((b) => {
-    //             const key = b.id_bem ?? b.id;
-    //             if (key === id) {
-    //             return updatedObj && Object.keys(updatedObj).length ? updatedObj : { ...b, ...payload };
-    //             }
-    //             return b;
-    //         })
-    //         );
-    //     }
-
-    //     closeModal();
-    //     } catch (err) {
-    //     console.error(err);
-    //     alert(err.message || "Erro ao salvar");
-    //     } finally {
-    //     setSaving(false);
-    //     }
-    // };
     const handleSave = async () => {
         if (!editingBem) return;
         setSaving(true);
@@ -330,7 +268,6 @@ export default function VerificaBem() {
                 </div>
             )}
 
-            {/* Modal de edição */}
             {isModalOpen && editingBem && (
             <div className="fixed inset-0 z-50 flex items-center justify-center">
                 <div className="absolute inset-0 bg-black/50" onClick={closeModal} />
