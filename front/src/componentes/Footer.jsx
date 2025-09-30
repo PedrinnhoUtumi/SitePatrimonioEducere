@@ -3,6 +3,7 @@ import React from "react";
 export default function Footer({
     github = "https://github.com/brunpena",
     githubPedro = "https://github.com/PedrinnhoUtumi",
+    githubSara = "https://github.com/saraqwe123",
     foundationName = "Fundação Educere",
 }) {
     const year = new Date().getFullYear();
@@ -18,6 +19,17 @@ export default function Footer({
 
                 <div className="flex items-center flex-wrap gap-3 justify-center">
                     <span className="text-xs text-gray-400 hidden sm:inline">Desenvolvido por</span>
+
+                    <a
+                        href={githubSara}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-3 py-1 rounded-2xl bg-gray-800/50 hover:bg-gray-800/70 transition-shadow shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        aria-label={`Abrir GitHub de saraqwe123`}
+                    >
+                        <span className="font-mono text-sm text-indigo-300">&lt;saraqwe123/&gt;</span>
+                        <GitHubIcon />
+                    </a>
 
                     <a
                         href={github}
