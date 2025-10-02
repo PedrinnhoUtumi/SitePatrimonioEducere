@@ -13,6 +13,7 @@
     "dotenv": "^17.2.2",
     "firebase-admin": "^13.5.0",
     "framer-motion": "^12.23.12",
+    "fs": "^0.0.1-security",
     "lucide": "^0.542.0",
     "lucide-react": "^0.542.0",
     "qrcode.react": "^4.2.0",
@@ -20,6 +21,7 @@
     "react-dom": "^19.1.1",
     "react-router-dom": "^6.30.1",
     "react-spinners": "^0.17.0",
+    "selfsigned": "^3.0.1",
     "uuid": "^13.0.0"
   },
   "devDependencies": {

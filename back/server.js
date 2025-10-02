@@ -43,7 +43,3 @@ app.get('/API', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://patrimonio.edu:${PORT}`);
 });
-
-
-// pm2 start server.js --name back
-// da uma olhada nisso aqui, lembra do npm i, acho q funciona

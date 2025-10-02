@@ -16,6 +16,17 @@ export default function ReservaSala() {
     const [loading, setLoading] = useState(false);
     const [msg, setMsg] = useState(null);
 
+    const getLocalDateTime = (date = new Date()) => {
+        const pad = (n) => String(n).padStart(2, "0");
+        const yyyy = date.getFullYear();
+        const MM = pad(date.getMonth() + 1);
+        const dd = pad(date.getDate());
+        const hh = pad(date.getHours());
+        const mm = pad(date.getMinutes());
+        return `${yyyy}-${MM}-${dd}T${hh}:${mm}`;
+    };
+
+
     useEffect(() => {
         const ac = new AbortController();
         const fetchSalas = async () => {
@@ -170,7 +181,7 @@ export default function ReservaSala() {
                             type="datetime-local"
                             value={dataInicio}
                             onChange={(e) => setDataInicio(e.target.value)}
-                            min={new Date().toISOString().slice(0, 16)} // YYYY-MM-DDTHH:MM
+                            min={getLocalDateTime()}
                             className="w-full mt-1 p-3 border rounded-xl bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-400"
                             required
                         />
@@ -185,7 +196,9 @@ export default function ReservaSala() {
                             type="datetime-local"
                             value={dataFim}
                             onChange={(e) => setDataFim(e.target.value)}
-                            min={dataInicio ? dataInicio : new Date().toISOString().slice(0, 16)}
+                            min={dataInicio}
+                            disabled={!dataInicio}
+
                             className="w-full mt-1 p-3 border rounded-xl bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-400"
                             required
                         />
