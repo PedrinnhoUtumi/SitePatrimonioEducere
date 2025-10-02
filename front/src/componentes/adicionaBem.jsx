@@ -4,22 +4,20 @@ import { Form } from "react-router-dom";
 
 export default function AdcionaBem() {
     function dateToISO(dateStr) {
-        if (!dateStr) return null; // aceita '' ou undefined
-        // espera 'YYYY-MM-DD'
+        if (!dateStr) return null;
         const parts = String(dateStr).split('-');
         if (parts.length !== 3) return null;
 
         const year = Number(parts[0]);
-        const month = Number(parts[1]); // 1..12
+        const month = Number(parts[1]);
         const day = Number(parts[2]);
 
         if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) return null;
 
-        // cria data em UTC ao meio-dia para evitar shift de dia por fuso horário
         const dt = new Date(Date.UTC(year, month - 1, day, 12, 0, 0));
         if (Number.isNaN(dt.getTime())) return null;
 
-        return dt.toISOString(); // ex: '2025-09-05T12:00:00.000Z'
+        return dt.toISOString(); 
     }
 
     const [form, setForm] = useState({
@@ -54,14 +52,18 @@ export default function AdcionaBem() {
 
         const va = parseInt(form.valorAquisicao, 10);
         const vr = parseInt(form.valorResidual, 10);
-        if (isNaN(va) || !Number.isInteger(va) || va < 0) {
-            errors.push("Valor da aquisição precisa ser um inteiro >= 0.");
-        }
-        if (isNaN(vr) || !Number.isInteger(vr) || vr < 0) {
-            errors.push("Valor residual precisa ser um inteiro >= 0.");
+        if (isNaN(va) || va < 0) {
+            errors.push("Valor da aquisição precisa ser um double >= 0.");
         }
 
-        // depreciação porcentagem (0 - 100)
+        if (isNaN(vr) || vr < 0) {
+            errors.push("Valor residual precisa ser um double >= 0.");
+        }
+
+        if (vr > va) {
+            errors.push("Valor residual precisa ser menor que valor de aquisição.");
+        }
+
         const dep = parseFloat(form.depreciacao);
         if (isNaN(dep) || dep < 0 || dep > 100) {
             errors.push("Depreciação deve ser uma porcentagem entre 0 e 100.");
@@ -75,7 +77,7 @@ export default function AdcionaBem() {
         setMessage(null);
 
         const errors = validate();
-        if (errors.length) {
+        if (errors.length > 0) {
             setMessage({ type: "error", text: errors.join(" ") });
             return;
         }
@@ -114,7 +116,6 @@ export default function AdcionaBem() {
             }
 
             setMessage({ type: "success", text: "Bem adicionado com sucesso." });
-            // opcional: limpar formulário
             setForm({
                 categoria: "Equipamentos",
                 descricao: "",
@@ -250,6 +251,7 @@ export default function AdcionaBem() {
                             name="valorResidual"
                             value={form.valorResidual}
                             onChange={handleChange}
+                            disabled={!form.valorAquisicao}
                             type="number"
                             step="0.01"
                             min="0"

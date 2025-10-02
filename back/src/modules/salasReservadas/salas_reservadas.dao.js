@@ -19,8 +19,8 @@ export default class SalasReservadasDao {
         .from(this.table)
         .select("*")
         .eq("id_sala", salaId)
-        .not("data_fim", "lte", startISO)   // end > start
-        .not("data_inicio", "gte", endISO)   // start < end
+        .not("data_fim", "lte", startISO)   
+        .not("data_inicio", "gte", endISO)   
 
     if (error) throw error
         return data
@@ -35,7 +35,6 @@ export default class SalasReservadasDao {
     )
 
     if (conflitos && conflitos.length > 0) {
-      // devolve erro para controller
         return { erro: "Sala já ocupada nesse intervalo", conflitos }
     }
 

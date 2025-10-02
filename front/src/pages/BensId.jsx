@@ -33,7 +33,6 @@ export default function BemDetalhe() {
   const copyId = async () => {
     try {
       await navigator.clipboard.writeText(id || "");
-      // simples feedback visual poderia ser adicionado aqui (toast)
     } catch (e) {
       // ignore
     }

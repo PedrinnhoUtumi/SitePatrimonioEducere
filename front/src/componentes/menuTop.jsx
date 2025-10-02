@@ -9,6 +9,7 @@ export default function MenuTop() {
     const user = JSON.parse(localStorage.getItem("user"));
     const userType = user?.type || "Visualizador";
     const userName = user?.nome || "Erro";
+    const userPhoto = user?.photo || null;
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -54,7 +55,15 @@ export default function MenuTop() {
                         </Link>
                     )}
                     <div className="flex items-center gap-2 text-blue-300 mt-2">
-                        <CircleUserIcon size={24} />
+                        {userPhoto ? (
+                            <img
+                                src={userPhoto}
+                                alt="Foto de perfil"
+                                className="w-8 h-8 rounded-full object-cover"
+                            />
+                        ) : (
+                            <CircleUserIcon size={28} />
+                        )}
                         <span className="font-semibold">{userName}</span>
                     </div>
                     <button onClick={handleLogout} className="hover:text-red-400 transition mt-2 text-sm">

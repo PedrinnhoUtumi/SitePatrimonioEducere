@@ -58,7 +58,6 @@ export default function Footer({
     );
 }
 
-// Ícone separado para reutilização
 function GitHubIcon() {
     return (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>

@@ -15,6 +15,9 @@ export default function Cadastro() {
     const [erroSenha, setErroSenha] = useState("");
     const [mostrarSenha, setMostrarSenha] = useState(false);
 
+    const [photoPreview, setPhotoPreview] = useState(null); 
+    const [photo, setPhoto] = useState(null); 
+
     const user = JSON.parse(localStorage.getItem("user"));
     const created_by = user?.nome || "Usuário não reconhecido";
 
@@ -37,10 +40,19 @@ export default function Cadastro() {
 
         setLoading(true);
         try {
+            const formData = new FormData();
+            formData.append("cpf", cpf);
+            formData.append("rg", rg);
+            formData.append("email", email);
+            formData.append("nome", nome);
+            formData.append("senha", senha);
+            formData.append("type", type);
+            formData.append("created_by", created_by);
+            if (photo) formData.append("photo", photo);
+
             const response = await fetch(`${CONFIG.API_URL}/users/cadastro`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ cpf, rg, email, nome, senha, type, created_by }),
+                body: formData,
             });
 
             if (!response.ok) throw new Error("Erro no cadastro: " + response.status);
@@ -54,6 +66,8 @@ export default function Cadastro() {
             setNome("");
             setSenha("");
             setType("");
+            setPhotoPreview(null);
+            setPhoto(null);
 
         } catch (err) {
             console.error("Erro ao cadastrar usuário:", err);
@@ -133,6 +147,37 @@ export default function Cadastro() {
                                     placeholder="Nome completo"
                                     className="w-full rounded-xl bg-white px-4 py-3"
                                 />
+
+                                <label className="text-slate-200 text-sm">Foto de perfil</label>
+                                <div className="flex items-center gap-3">
+                                    <input
+                                        type="file"
+                                        id="upload-photo"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={(e) => {
+                                            const file = e.target.files[0];
+                                            if (file) {
+                                                setPhoto(file);
+                                                setPhotoPreview(URL.createObjectURL(file));
+                                            }
+                                        }}
+                                    />
+                                    <label
+                                        htmlFor="upload-photo"
+                                        className="cursor-pointer px-3 py-2 text-sm rounded-lg bg-indigo-600 hover:bg-indigo-500 transition text-white"
+                                    >
+                                        Upload Photo
+                                    </label>
+
+                                    {photoPreview && (
+                                        <img
+                                            src={photoPreview}
+                                            alt="Preview"
+                                            className="w-12 h-12 rounded-full object-cover border"
+                                        />
+                                    )}
+                                </div>
 
                                 <label className="text-slate-200 text-sm">Senha</label>
                                 <div className="relative">

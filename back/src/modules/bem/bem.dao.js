@@ -1,4 +1,4 @@
-import { supabase } from '../../infra/bd.js'; // ajuste o caminho conforme seu projeto
+import { supabase } from '../../infra/bd.js'; 
 
 export default class BemDao {
     constructor() {
@@ -14,14 +14,13 @@ export default class BemDao {
         return data;
     }
 
-  // Retorna o maior idQrCode (número) ou 0 se não houver registros
     async getMaxIdQr() {
         const { data, error } = await supabase
         .from(this.table)
         .select('idQrCode')
         .order('idQrCode', { ascending: false })
         .limit(1)
-        .maybeSingle(); // evita erro se não existir linha
+        .maybeSingle(); 
 
         if (error) throw error;
 
@@ -29,9 +28,7 @@ export default class BemDao {
         return Number(data.idQrCode);
     }
 
-  // Insere um bem. body: objeto com os campos (camelCase ou snake_case conforme seu schema)
     async addBem(body) {
-        // filtra apenas propriedades undefined (permitindo explicitamente null)
         const insertObj = {};
         Object.keys(body).forEach((k) => {
         if (body[k] !== undefined) insertObj[k] = body[k];
@@ -52,7 +49,6 @@ export default class BemDao {
             throw new Error('id é obrigatório');
         }
 
-        // usa .delete().select() para obter a(s) linha(s) deletada(s)
         const { data, error } = await supabase
             .from(this.table)
             .update({ status: false })
@@ -78,17 +74,16 @@ export default class BemDao {
             .maybeSingle();
 
         if (error) {
-            // adiciona contexto e lança para o controller tratar
             const e = new Error(`Supabase error: ${error.message || JSON.stringify(error)}`);
             e.details = error;
             e.status = 500;
             throw e;
         }
 
-        return data; // null se não encontrado
+        return data;
         } catch (err) {
         console.error('[bemDao] erro inesperado:', err);
-        throw err; // re-lança pro controller
+        throw err; 
         }
     }
 
@@ -100,7 +95,6 @@ export default class BemDao {
             throw new Error('Nenhum campo para atualizar foi fornecido');
         }
 
-        // Executa update no supabase e retorna as linhas atualizadas
         const { data, error } = await supabase
             .from(this.table)
             .update(updates)

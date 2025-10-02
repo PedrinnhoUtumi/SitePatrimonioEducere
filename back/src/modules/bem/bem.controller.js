@@ -40,14 +40,12 @@ export async function deleteBem(req, res) {
         return res.status(404).json({ message: 'Bem não encontrado.' });
         }
 
-        // sucesso
         return res.status(200).json({
         message: 'Bem deletado com sucesso.',
-        deleted: deletedRows, // contém os registros deletados
+        deleted: deletedRows,
         });
     } catch (err) {
         console.error('deleteBem error:', err);
-        // detecção simples de erro do supabase
         const status = err?.status || 500;
         return res.status(status).json({ error: err.message || 'Erro ao deletar bem.' });
     }
@@ -68,10 +66,8 @@ export async function unicBem(req, res) {
 
         return res.status(200).json(Bem);
     } catch (err) {
-        // log completo no servidor
         console.error('unicBem error:', err);
 
-        // em dev, retorne mensagem + stack; em prod, só mensagem segura
         const status = err?.status || 500;
         const response = { error: err.message || 'Erro ao buscar bem.' };
         if (isDev && err.stack) response.stack = err.stack;

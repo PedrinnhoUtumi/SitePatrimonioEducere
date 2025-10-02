@@ -89,7 +89,7 @@ export default function VerificaBem() {
                 marca: editingBem.marca,
                 modelo: editingBem.modelo,
                 localizacao_text: editingBem.localizacao_text,
-                valor_aquisicao: editingBem.valor_aquisicao ? Number(editingBem.valor_aquisicao) : null,
+                valor_aquisicao: editingBem.valor_aquisicao ? Number(editingBem.valor_aquisicao) && editingBem.valor_aquisicao >= editingBem.valor_residual : null,
                 valor_residual: editingBem.valor_residual ? Number(editingBem.valor_residual) : null,
                 estado_conservacao: editingBem.estado_conservacao,
                 data_aquisicao: editingBem.data_aquisicao ? new Date(editingBem.data_aquisicao).toISOString() : null,
@@ -151,7 +151,6 @@ export default function VerificaBem() {
 
             const updatedBem = Array.isArray(body) ? body[0] : body;
 
-            // se o backend retornou status false, remove da lista; caso contrário atualiza o item
             if (updatedBem && (updatedBem.status === false || updatedBem.status === "false")) {
                 setBens((prev) => prev.filter((b) => (b.id_bem ?? b.id) !== id));
             } else {
@@ -375,6 +374,7 @@ export default function VerificaBem() {
                                         min="0"
                                         onChange={handleChange}
                                         className="border rounded px-2 py-1"
+                                        disabled={!editingBem.valor_aquisicao}
                                         onBlur={(e) => {
                                             let value = parseFloat(e.target.value);
                                             if (!isNaN(value)) {
