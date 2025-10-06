@@ -235,7 +235,7 @@ export default function VerificaBem() {
                                             <td className="px-3 py-2 border">
                                                 <div className="w-20 h-20 flex items-center justify-center">
                                                     <QRCodeCanvas
-                                                        value={`http://patrimonio.edu/Bensid/${bem.id_bem ?? bem.id ?? ""}`}
+                                                        value={`http://192.168.3.250/Bensid/${bem.id_bem ?? bem.id ?? ""}`}
                                                         size={80}
                                                     />
                                                 </div>

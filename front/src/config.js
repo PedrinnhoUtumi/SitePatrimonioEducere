@@ -1,3 +1,3 @@
 export const CONFIG = {
-  API_URL: "http://patrimonio.edu:3001",
+  API_URL: "http://192.168.3.250:3001",
 };

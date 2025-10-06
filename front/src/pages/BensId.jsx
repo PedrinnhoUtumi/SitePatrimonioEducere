@@ -104,7 +104,7 @@ export default function BemDetalhe() {
           <aside className="flex flex-col items-center justify-start gap-4">
             <div className="bg-gray-50 p-4 rounded-lg w-full flex flex-col items-center">
               <QRCodeCanvas
-                value={`http://patrimonio.edu/Bensid/${id}`}
+                value={`http://192.168.3.250/Bensid/${id}`}
                 size={148}
                 className="rounded-md"
               />
@@ -113,7 +113,7 @@ export default function BemDetalhe() {
 
               <div className="mt-3 w-full flex gap-2">
                 <a
-                  href={`http://patrimonio.edu/Bensid/${id}`}
+                  href={`http://192.168.3.250/Bensid/${id}`}
                   target="_blank"
                   rel="noreferrer"
                   className="flex-1 text-center rounded-md px-3 py-2 bg-white ring-1 ring-gray-200 hover:bg-gray-50 text-sm"
@@ -122,7 +122,7 @@ export default function BemDetalhe() {
                 </a>
 
                 <button
-                  onClick={() => navigator.clipboard.writeText(`http://patrimonio.edu/Bensid/${id}`)}
+                  onClick={() => navigator.clipboard.writeText(`http://192.168.3.250/Bensid/${id}`)}
                   className="px-3 py-2 rounded-md bg-gray-100 hover:bg-gray-200 text-sm"
                 >
                   Copiar link

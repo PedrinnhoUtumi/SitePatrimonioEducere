@@ -42,5 +42,5 @@ app.get('/API', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://patrimonio.edu:${PORT}`);
+    console.log(`Servidor rodando em http://http://192.168.3.250:${PORT}`);
 });
