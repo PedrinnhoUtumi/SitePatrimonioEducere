@@ -89,7 +89,8 @@ export default function VerificaBem() {
                 marca: editingBem.marca,
                 modelo: editingBem.modelo,
                 localizacao_text: editingBem.localizacao_text,
-                valor_aquisicao: editingBem.valor_aquisicao ? Number(editingBem.valor_aquisicao) && editingBem.valor_aquisicao >= editingBem.valor_residual : null,
+                // valor_aquisicao: editingBem.valor_aquisicao ? Number(editingBem.valor_aquisicao) && Number(editingBem.valor_aquisicao) >= Number(editingBem.valor_residual) : null,
+                valor_aquisicao: editingBem.valor_aquisicao ? Number(editingBem.valor_aquisicao) : null,
                 valor_residual: editingBem.valor_residual ? Number(editingBem.valor_residual) : null,
                 estado_conservacao: editingBem.estado_conservacao,
                 data_aquisicao: editingBem.data_aquisicao ? new Date(editingBem.data_aquisicao).toISOString() : null,
@@ -133,7 +134,7 @@ export default function VerificaBem() {
             const res = await fetch(url, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json", Accept: "application/json" },
-                body: JSON.stringify({ status: false /*, justificativa_baixa: "..." se precisar */ }),
+                body: JSON.stringify({ status: false }),
             });
 
             const text = await res.text();

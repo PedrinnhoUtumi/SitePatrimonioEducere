@@ -42,7 +42,6 @@ export default function Login() {
         }
 
         if (data.token) localStorage.setItem("token", data.token);
-        // localStorage.setItem("user", JSON.stringify({ id: data.user.id_user, type: data.user.type, nome: data.user.nome, photo: data.user.photo }));
         localStorage.setItem("user", JSON.stringify({ id: data.user.id_user, type: data.user.type, nome: data.user.nome }));
         localStorage.setItem("usuario", "𝔾𝕆𝕆𝔻 𝔹𝕆𝕐");
         
