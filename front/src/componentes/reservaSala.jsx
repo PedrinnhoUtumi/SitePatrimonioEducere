@@ -26,6 +26,19 @@ export default function ReservaSala() {
         return `${yyyy}-${MM}-${dd}T${hh}:${mm}`;
     };
 
+    function formatDateTimeLocal(date) {
+        const pad = (n) => String(n).padStart(2, "0");
+
+        const year = date.getFullYear();
+        const month = pad(date.getMonth() + 1);
+        const day = pad(date.getDate());
+        const hours = pad(date.getHours());
+        const minutes = pad(date.getMinutes());
+
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+
+
 
     useEffect(() => {
         const ac = new AbortController();
@@ -197,6 +210,14 @@ export default function ReservaSala() {
                             value={dataFim}
                             onChange={(e) => setDataFim(e.target.value)}
                             min={dataInicio}
+                            max={
+                                dataInicio
+                                    ? formatDateTimeLocal(
+                                        new Date(new Date(dataInicio).getTime() + 3 * 24 * 60 * 60 * 1000)
+                                    )
+                                    : ""
+                            }
+
                             disabled={!dataInicio}
 
                             className="w-full mt-1 p-3 border rounded-xl bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-400"
@@ -219,8 +240,8 @@ export default function ReservaSala() {
                 {msg && (
                     <div
                         className={`mt-4 p-3 rounded text-sm ${msg.type === "success"
-                                ? "bg-green-100 text-green-800"
-                                : "bg-red-100 text-red-800"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
                             }`}
                     >
                         {msg.text}
