@@ -26,9 +26,9 @@ export default function MenuTop() {
     const user = JSON.parse(localStorage.getItem("user"));
     const userType = user?.type || "Visualizador";
     const userName = user?.nome || "Erro";
-    const ID = user?.id || "Erro";
-    const CPF = user?.cpf || "Erro";
-    const RG = user?.rg || "Erro";
+    const ID = user?.id;
+    const CPF = user?.cpf;
+    const RG = user?.rg;
     const email = user?.email || "Erro";
     const userPhoto = user?.photo || null;
 
