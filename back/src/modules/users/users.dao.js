@@ -15,6 +15,17 @@ export default class UsersDao {
         return data;
     }
 
+    async atualizar(body, id) {
+        const { data, error } = await supabase
+        .from(this.table)
+        .update([body])
+        .eq('id_user', id)
+        .select(); 
+
+        if (error) throw error;
+        return data[0];
+    }
+
     async findByEmail(email) {
         const { data, error } = await supabase
         .from(this.table)

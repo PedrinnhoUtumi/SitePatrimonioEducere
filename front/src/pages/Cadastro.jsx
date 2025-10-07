@@ -48,7 +48,7 @@ export default function Cadastro() {
             formData.append("senha", senha);
             formData.append("type", type);
             formData.append("created_by", created_by);
-            if (photo) formData.append("photo", photo);
+            formData.append("photo", photo);
 
             const response = await fetch(`${CONFIG.API_URL}/users/cadastro`, {
                 method: "POST",

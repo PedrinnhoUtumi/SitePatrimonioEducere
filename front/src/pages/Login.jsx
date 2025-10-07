@@ -42,7 +42,7 @@ export default function Login() {
         }
 
         if (data.token) localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify({ id: data.user.id_user, type: data.user.type, nome: data.user.nome }));
+        localStorage.setItem("user", JSON.stringify({ id: data.user.id_user, type: data.user.type, nome: data.user.nome, photo: data.user.photo, rg: data.user.rg, cpf: data.user.cpf, email: data.user.email }));
         localStorage.setItem("usuario", "𝔾𝕆𝕆𝔻 𝔹𝕆𝕐");
         
         navigate("/bens");

@@ -1,36 +1,33 @@
 import UsersDao from './users.dao.js';
 import bcrypt from 'bcrypt';
+import path from 'path';
+import cpfValidate from 'cpf'
 
 const usersDao = new UsersDao();
 
 export async function cadastroUser(req, res) {
     try {
-        const { senha, ...rest } = req.body;
+        const { senha, cpf, ...rest } = req.body;
         const photo = req.files.photo;
-        
-        
-        const caminho = `../back/src/imagens/${Date.now()}_${photo.name}`;
-        console.log("caminho: ", caminho);
-        await photo.mv(caminho);
 
-        if (!senha) return res.status(400).json({ message: 'Senha é obrigatória' });
 
+        const fileName = `${Date.now()}_${photo.name}`;
+        const uploadPath = path.join('src', 'imagens', fileName);
+
+        await photo.mv(uploadPath);
+        const valido = cpfValidate.isValid(cpf);
+
+        if (!senha || !valido) return res.status(400).json({ message: 'Senha é obrigatória || CPF não é valido' });
+        
         const saltRounds = 10;
         const senha_hash = await bcrypt.hash(senha, saltRounds);
 
-        // const newUser = {
-        //     ...rest,
-        //     senha_hash,
-        //     created_at: new Date().toISOString(),
-        //     updated_at: new Date().toISOString(),
-        //     photo: photo
-        // };
-        
         const newUser = {
             ...rest,
             senha_hash,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
+            photo: fileName
         };
 
         const saved = await usersDao.cadastrar(newUser);
@@ -48,6 +45,54 @@ export async function cadastroUser(req, res) {
         });
     }
 }
+
+export async function atualizarUser(req, res) {
+    try {
+        const { id, nome, cpf, rg, email, senha } = req.body;
+
+        const valido = cpfValidate.isValid(cpf);
+
+        if (!valido) return res.status(400).json({ error: "CPF não é valido" });
+
+        const updatedData = {
+            ...(nome && { nome }),
+            ...(cpf && { cpf }),
+            ...(rg && { rg }),
+            ...(email && { email }),
+            updated_at: new Date().toISOString(),
+        };
+
+        if (senha && senha.trim() !== "") {
+            const saltRounds = 10;
+            updatedData.senha = await bcrypt.hash(senha, saltRounds);
+        }
+
+        if (req.files && req.files.photo) {
+            const photo = req.files.photo;
+            const fileName = `${Date.now()}_${photo.name}`;
+            const uploadPath = path.join("src", "imagens", fileName);
+            await photo.mv(uploadPath);
+            updatedData.photo = fileName;
+        }
+
+        const updated = await usersDao.atualizar(updatedData, id);
+        const updatedUser = Array.isArray(updated) ? updated[0] : updated;
+
+        res.status(200).json({
+            message: "Usuário atualizado com sucesso!",
+            user: updatedUser,
+        });
+
+    } catch (error) {
+        console.error("Erro ao atualizar usuário:", error);
+        res.status(500).json({
+            message: "Erro ao atualizar usuário",
+            error: error.message,
+        });
+    }
+}
+
+
 
 export async function loginUser(req, res) {
     try {
