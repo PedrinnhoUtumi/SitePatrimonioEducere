@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { EyeIcon, EyeClosedIcon } from "lucide-react";
+import { EyeIcon, EyeClosedIcon, CircleUserIcon } from "lucide-react";
 import Foot from "../componentes/Footer";
 import MenuTop from "../componentes/menuTop";
 import { CONFIG } from "../config";
@@ -127,6 +127,7 @@ export default function Cadastro() {
                                     type="email"
                                     placeholder="seu@email.com"
                                     className="w-full rounded-xl bg-white px-4 py-3"
+                                    autoComplete="off"
                                 />
 
                                 <label className="text-slate-200 text-sm">Tipo de Usuário</label>
@@ -165,18 +166,20 @@ export default function Cadastro() {
                                     />
                                     <label
                                         htmlFor="upload-photo"
-                                        className="cursor-pointer px-3 py-2 text-sm rounded-lg bg-indigo-600 hover:bg-indigo-500 transition text-white"
+                                        className="cursor-pointer px-3 py-2 w-20 h-20 flex justify-center border hover:border-blue-600 hover:text-blue-600 items-center text-sm rounded-full bg-blue-600 hover:bg-white hover:border-2 transition text-white"
                                     >
-                                        Upload Photo
+                                        {photoPreview ? (
+                                            <img
+                                                src={photoPreview}
+                                                alt="Preview"
+                                                className="w-12 h-12 rounded-full object-cover"
+                                            />
+                                        ) : (
+                                            <CircleUserIcon className="object-contain w-20 h-20"/>
+                                        )}
+                                        
                                     </label>
 
-                                    {photoPreview && (
-                                        <img
-                                            src={photoPreview}
-                                            alt="Preview"
-                                            className="w-12 h-12 rounded-full object-cover border"
-                                        />
-                                    )}
                                 </div>
 
                                 <label className="text-slate-200 text-sm">Senha</label>
@@ -187,6 +190,7 @@ export default function Cadastro() {
                                         type={mostrarSenha ? "text" : "password"}
                                         placeholder="Senha12#"
                                         className="w-full rounded-xl bg-white px-4 py-3 pr-12"
+                                        autoComplete="new-password"
                                     />
 
                                     <button

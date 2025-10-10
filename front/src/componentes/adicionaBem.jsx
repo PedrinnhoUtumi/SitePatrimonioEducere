@@ -3,6 +3,8 @@ import { CONFIG } from "../config";
 import { Form } from "react-router-dom";
 
 export default function AdcionaBem() {
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState(null);
     function dateToISO(dateStr) {
         if (!dateStr) return null;
         const parts = String(dateStr).split('-');
@@ -35,8 +37,6 @@ export default function AdcionaBem() {
         estado_conservacao: "Novo",
     });
 
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState(null);
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -369,7 +369,7 @@ export default function AdcionaBem() {
                             onChange={handleChange}
                             className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
                         >
-                                <option>Novo</option>
+                            <option>Novo</option>
                             <option>Usado recente</option>
                             <option>Anos de uso</option>
                             <option>Avariado</option>
@@ -381,8 +381,8 @@ export default function AdcionaBem() {
             {message && (
                 <div
                     className={`mt-4 p-3 rounded ${message.type === "error"
-                            ? "bg-red-100 text-red-800"
-                            : "bg-green-100 text-green-800"
+                        ? "bg-red-100 text-red-800"
+                        : "bg-green-100 text-green-800"
                         }`}
                 >
                     {message.text}

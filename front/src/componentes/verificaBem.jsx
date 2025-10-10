@@ -49,6 +49,22 @@ export default function VerificaBem() {
         return <p className="text-red-600">Erro: {error}</p>;
     }
 
+    function formatNumberBR(value) {
+        if (value === "" || value === null || isNaN(value)) return "";
+        return new Intl.NumberFormat("pt-BR", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        }).format(value);
+    }
+
+    function parseNumberBR(str) {
+        if (!str) return null;
+        const normalized = str.replace(/\./g, "").replace(",", ".");
+        const num = parseFloat(normalized);
+        if (isNaN(num) || num < 0) return null;
+        return num;
+    }
+
     const toInputDate = (iso) => {
         if (!iso) return "";
         const d = new Date(iso);
@@ -89,7 +105,6 @@ export default function VerificaBem() {
                 marca: editingBem.marca,
                 modelo: editingBem.modelo,
                 localizacao_text: editingBem.localizacao_text,
-                // valor_aquisicao: editingBem.valor_aquisicao ? Number(editingBem.valor_aquisicao) && Number(editingBem.valor_aquisicao) >= Number(editingBem.valor_residual) : null,
                 valor_aquisicao: editingBem.valor_aquisicao ? Number(editingBem.valor_aquisicao) : null,
                 valor_residual: editingBem.valor_residual ? Number(editingBem.valor_residual) : null,
                 estado_conservacao: editingBem.estado_conservacao,
@@ -224,18 +239,19 @@ export default function VerificaBem() {
                                             <td className="px-3 py-2 border">{bem.localizacao_text ?? "-"}</td>
                                             <td className="px-3 py-2 border">{formatDate(bem.data_aquisicao)}</td>
                                             <td className="px-3 py-2 border">{formatDate(bem.data_baixa)}</td>
-                                            <td className="px-3 py-2 border">{bem.depreciacao_percent ?? "-"}%</td>
+                                            <td className="px-3 py-2 border">{bem.depreciacao_percent != null ? `${formatNumberBR(bem.depreciacao_percent)}%` : "-"}</td>
                                             <td className="px-3 py-2 border max-w-[220px] break-words">
                                                 {bem.justificativa_baixa ?? "-"}
                                             </td>
-                                            <td className="px-3 py-2 border">R$ {bem.valor_aquisicao ?? "-"}</td>
-                                            <td className="px-3 py-2 border">R$ {bem.valor_residual ?? "-"}</td>
+                                            <td className="px-3 py-2 border">{bem.valor_aquisicao != null ? `R$ ${formatNumberBR(bem.valor_aquisicao)}` : "-"}</td>
+                                            <td className="px-3 py-2 border">{bem.valor_residual != null ? `R$ ${formatNumberBR(bem.valor_residual)}` : "-"}</td>
                                             <td className="px-3 py-2 border">{bem.modelo ?? "-"}</td>
                                             <td className="px-3 py-2 border">{bem.estado_conservacao ?? "-"}</td>
                                             <td className="px-3 py-2 border">
                                                 <div className="w-20 h-20 flex items-center justify-center">
                                                     <QRCodeCanvas
-                                                        value={`http://patrimonio.edu/Bensid/${bem.id_bem ?? bem.id ?? ""}`}
+                                                        // value={`http://patrimonio.edu/Bensid/${bem.id_bem ?? bem.id ?? ""}`}
+                                                        value={`http://localhost/Bensid/${bem.id_bem ?? bem.id ?? ""}`}
                                                         size={80}
                                                     />
                                                 </div>

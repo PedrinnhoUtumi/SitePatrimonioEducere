@@ -45,6 +45,7 @@ app.get('/salas/all', salasController.findAll)
 
 app.get('/salaReservada/findSalas', salasReservadasController.findSalas)
 app.post('/salaReservada/add', salasReservadasController.addReserva)
+app.delete('/salaReservada/delete/:id_reserva', salasReservadasController.deleteSalas)
 
 app.get('/API', (req, res) => {
     res.send({ mensagem: 'API funcionando' })
@@ -52,5 +53,6 @@ app.get('/API', (req, res) => {
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://patrimonio.edu:${PORT}`)
+    // console.log(`Servidor rodando em http://patrimonio.edu:${PORT}`)
+    console.log(`Servidor rodando em http://localhost:${PORT}`)
 })

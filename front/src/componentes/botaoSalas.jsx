@@ -43,7 +43,7 @@ export default function BotaoBem({ onSelect }) {
                         <span
                             className={`relative z-10 font-semibold transition ${
                                 isActive
-                                    ? "bg-gradient-to-r from-blue-900 to-blue-400 text-transparent bg-clip-text drop-shadow-[0_0_8px_rgba(59,130,246,0.9)]"
+                                    ? "bg-gradient-to-r from-blue-900 to-blue-400 text-blue-500 bg-clip-text drop-shadow-[0_0_8px_rgba(59,130,246,0.9)]"
                                     : "text-gray-100"
                             }`}
                         >

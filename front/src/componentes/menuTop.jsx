@@ -33,7 +33,7 @@ export default function MenuTop() {
     const userPhoto = user?.photo || null;
 
     const [updatedUser, setUpdatedUser] = useState({
-        id: ID,
+        id: ID || "",
         nome: userName,
         cpf: CPF,
         rg: RG,
@@ -57,24 +57,88 @@ export default function MenuTop() {
         return regex.test(senha);
     };
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+
+    //     if (updatedUser.senha) {
+    //         if (!validarSenha(updatedUser.senha)) {
+    //             setErroSenha(
+    //                 "A senha deve ter no mínimo 8 caracteres, uma letra maiúscula e um caractere especial."
+    //             );
+    //             return;
+    //         } else {
+    //             setErroSenha("");
+    //         }
+    //     }
+
+    //     setLoading(true);
+
+    //     try {
+    //         const formData = new FormData();
+    //         if (!updatedUser.id) {
+    //             alert("ID do usuário não definido. Recarregue a página.");
+    //             return;
+    //         }
+    //         formData.append("id", updatedUser.id);
+    //         formData.append("nome", updatedUser.nome);
+    //         formData.append("cpf", updatedUser.cpf);
+    //         formData.append("rg", updatedUser.rg);
+    //         formData.append("email", updatedUser.email);
+
+    //         if (updatedUser.senha && updatedUser.senha.trim() !== "") {
+    //             formData.append("senha", updatedUser.senha);
+    //         }
+
+    //         if (updatedUser.photo && typeof updatedUser.photo !== "string") {
+    //             formData.append("photo", updatedUser.photo);
+    //         }
+
+    //         const response = await fetch(`${CONFIG.API_URL}/users/update`, {
+    //             method: "PUT",
+    //             body: formData,
+    //         });
+
+    //         if (!response.ok) throw new Error("Erro no cadastro: " + response.message);
+
+    //         const data = await response.json();
+    //         localStorage.setItem("user", JSON.stringify(data.user));
+
+    //         alert("Usuário atualizado com sucesso!");
+
+    //         setUpdatedUser((prev) => ({
+    //             ...prev,
+    //             senha: "",
+    //             photo: null,
+    //             id: prev.id
+    //         }));
+
+    //         window.location.reload();
+    //     } catch (err) {
+    //         console.error("Erro ao cadastrar usuário:", err);
+    //         alert("Erro ao cadastrar usuário. Tente novamente.");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Valida a senha só se ela for enviada
-        if (updatedUser.senha) {
-            if (!validarSenha(updatedUser.senha)) {
-                setErroSenha(
-                    "A senha deve ter no mínimo 8 caracteres, uma letra maiúscula e um caractere especial."
-                );
-                return;
-            } else {
-                setErroSenha("");
-            }
+        if (updatedUser.senha && !validarSenha(updatedUser.senha)) {
+            setErroSenha(
+                "A senha deve ter no mínimo 8 caracteres, uma letra maiúscula e um caractere especial."
+            );
+            return;
         }
-
+        setErroSenha("");
         setLoading(true);
 
         try {
+            if (!updatedUser.id) {
+                alert("ID do usuário não definido. Recarregue a página.");
+                setLoading(false);
+                return;
+            }
+
             const formData = new FormData();
             formData.append("id", updatedUser.id);
             formData.append("nome", updatedUser.nome);
@@ -82,12 +146,9 @@ export default function MenuTop() {
             formData.append("rg", updatedUser.rg);
             formData.append("email", updatedUser.email);
 
-            // Apenas envia senha se ela foi preenchida
-            if (updatedUser.senha && updatedUser.senha.trim() !== "") {
-                formData.append("senha", updatedUser.senha);
-            }
+            if (updatedUser.senha) formData.append("senha", updatedUser.senha);
 
-            // Apenas envia foto se for nova (um objeto File)
+            // Só envia foto se for um arquivo novo
             if (updatedUser.photo && typeof updatedUser.photo !== "string") {
                 formData.append("photo", updatedUser.photo);
             }
@@ -97,20 +158,23 @@ export default function MenuTop() {
                 body: formData,
             });
 
-            if (!response.ok) throw new Error("Erro no cadastro: " + response.message);
+            if (!response.ok) throw new Error("Erro no cadastro");
 
             const data = await response.json();
             localStorage.setItem("user", JSON.stringify(data.user));
 
             alert("Usuário atualizado com sucesso!");
 
+            // Reseta apenas campos de senha e preview, sem mexer no id nem na foto do user
             setUpdatedUser((prev) => ({
                 ...prev,
                 senha: "",
-                photo: null,
+                photo: prev.photo && typeof prev.photo !== "string" ? prev.photo : prev.photo || user.photo,
             }));
 
-            window.location.reload();
+            setPreviewPhoto(null);
+            window.location.reload()
+
         } catch (err) {
             console.error("Erro ao cadastrar usuário:", err);
             alert("Erro ao cadastrar usuário. Tente novamente.");

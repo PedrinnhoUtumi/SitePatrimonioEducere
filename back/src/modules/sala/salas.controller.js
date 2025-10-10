@@ -20,3 +20,13 @@ export async function addSala(req, res) {
         return res.status(500).json({ erro: 'Erro ao cadastrar Sala' });
     }
 }
+
+export async function deleteSala(req, res) {
+    try {
+        const Salas = await salasDao.deleteSala(req.body);
+        return res.json(Salas);
+    } catch (error) {
+        console.error('Erro ao cadastrar Sala: ', error);
+        return res.status(500).json({ erro: 'Erro ao cadastrar Sala' });
+    }
+}

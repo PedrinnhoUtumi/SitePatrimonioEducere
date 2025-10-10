@@ -7,22 +7,22 @@ export default class SalasReservadasDao {
 
     async getSalas() {
         const { data, error } = await supabase
-        .from(this.table)
-        .select("*")
+            .from(this.table)
+            .select("*")
 
-    if (error) throw error
+        if (error) throw error
         return data
-    } 
+    }
 
     async findConflictingReservations(salaId, startISO, endISO) {
         const { data, error } = await supabase
-        .from(this.table)
-        .select("*")
-        .eq("id_sala", salaId)
-        .not("data_fim", "lte", startISO)   
-        .not("data_inicio", "gte", endISO)   
+            .from(this.table)
+            .select("*")
+            .eq("id_sala", salaId)
+            .not("data_fim", "lte", startISO)
+            .not("data_inicio", "gte", endISO)
 
-    if (error) throw error
+        if (error) throw error
         return data
     }
 
@@ -32,18 +32,28 @@ export default class SalasReservadasDao {
             sala.id_sala,
             sala.data_inicio,
             sala.data_fim
-    )
+        )
 
-    if (conflitos && conflitos.length > 0) {
-        return { erro: "Sala já ocupada nesse intervalo", conflitos }
-    }
+        if (conflitos && conflitos.length > 0) {
+            return { erro: "Sala já ocupada nesse intervalo", conflitos }
+        }
 
-    const { data, error } = await supabase
-        .from(this.table)
-        .insert([sala])
-        .select()
+        const { data, error } = await supabase
+            .from(this.table)
+            .insert([sala])
+            .select()
 
         if (error) throw error
-            return data
+        return data
+    }
+
+    async deleteReserva(id_reserva) {
+        const { data, error } = await supabase
+            .from(this.table)
+            .delete()
+            .eq("id_reserva", id_reserva)
+
+        if (error) throw error
+        return data
     }
 }

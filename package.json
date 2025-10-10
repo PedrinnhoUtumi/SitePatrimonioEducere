@@ -7,15 +7,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/brunpena/SitePatrimonio.git"
+    "url": "git+https://github.com/PedrinnhoUtumi/SitePatrimonioEducere.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/brunpena/SitePatrimonio/issues"
+    "url": "https://github.com/PedrinnhoUtumi/SitePatrimonioEducere/issues"
   },
-  "homepage": "https://github.com/brunpena/SitePatrimonio#readme",
+  "homepage": "https://github.com/PedrinnhoUtumi/SitePatrimonioEducere#readme",
   "description": "",
   "devDependencies": {
     "concurrently": "^9.2.1"

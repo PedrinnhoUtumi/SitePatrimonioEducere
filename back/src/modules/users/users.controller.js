@@ -64,7 +64,7 @@ export async function atualizarUser(req, res) {
 
         if (senha && senha.trim() !== "") {
             const saltRounds = 10;
-            updatedData.senha = await bcrypt.hash(senha, saltRounds);
+            updatedData.senha_hash = await bcrypt.hash(senha, saltRounds);
         }
 
         if (req.files && req.files.photo) {
