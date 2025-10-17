@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { CONFIG } from "../config";
+import { CONFIG } from "../../config";
 import { v4 as uuidv4 } from "uuid";
 
-export default function ReservaSala() {
+export function ReservaSala() {
     const [salas, setSalas] = useState([]);
     const [salasLoading, setSalasLoading] = useState(false);
     const [salasError, setSalasError] = useState(null);

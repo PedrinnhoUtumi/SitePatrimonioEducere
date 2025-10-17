@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import SyncLoader from "react-spinners/SyncLoader";
 import { Trash } from 'lucide-react';
 
-import { CONFIG } from "../config";
+import { CONFIG } from "../../config";
 
 const endpointSalas = `${CONFIG.API_URL}/salas/all`;
 const endpointReservas = `${CONFIG.API_URL}/salaReservada/findSalas`;
@@ -10,7 +10,7 @@ const endpointReservas = `${CONFIG.API_URL}/salaReservada/findSalas`;
 function toDate(d) { return d ? new Date(d) : null; }
 function overlap(aStart, aEnd, bStart, bEnd) { return aStart < bEnd && bStart < aEnd; }
 
-export default function SalasReservadasCalendar() {
+export function SalasReservadasCalendar() {
     const [salasList, setSalasList] = useState([]);
     const [reservas, setReservas] = useState([]);
     const [loading, setLoading] = useState(true);

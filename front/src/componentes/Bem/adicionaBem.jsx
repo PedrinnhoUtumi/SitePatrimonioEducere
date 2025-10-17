@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { CONFIG } from "../config";
+import { CONFIG } from "../../config";
 import { Form } from "react-router-dom";
 
-export default function AdcionaBem() {
+export function AdcionaBem() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState(null);
     function dateToISO(dateStr) {

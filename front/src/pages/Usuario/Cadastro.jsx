@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { EyeIcon, EyeClosedIcon, CircleUserIcon } from "lucide-react";
-import Foot from "../componentes/Footer";
-import MenuTop from "../componentes/menuTop";
-import { CONFIG } from "../config";
+import { CONFIG } from "../../config";
 
-export default function Cadastro() {
+export function Cadastro() {
     const [cpf, setCpf] = useState("");
     const [rg, setRg] = useState("");
     const [email, setEmail] = useState("");
@@ -78,8 +76,7 @@ export default function Cadastro() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#2f4a5a] via-[#253544] to-[#0b1620]">
-            <MenuTop />
+        <div className="h-full w-fullflex flex-col bg-gradient-to-br from-[#2f4a5a] via-[#253544] to-[#0b1620]">
 
             <main className="flex flex-1 justify-center items-center p-6">
                 <div className="relative w-full max-w-md">
@@ -223,7 +220,6 @@ export default function Cadastro() {
                 </div>
             </main>
 
-            <Foot />
         </div>
     );
 }

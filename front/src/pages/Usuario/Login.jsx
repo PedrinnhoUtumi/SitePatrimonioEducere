@@ -1,9 +1,9 @@
 import { EyeClosedIcon, EyeIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CONFIG } from "../config";
+import { CONFIG } from "../../config";
 
-export default function Login() {
+export function Login() {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

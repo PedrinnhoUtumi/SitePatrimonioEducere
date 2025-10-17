@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Footer({
+export function Footer({
     github = "https://github.com/brunpena",
     githubPedro = "https://github.com/PedrinnhoUtumi",
     githubSara = "https://github.com/saraqwe123",
@@ -9,7 +9,7 @@ export default function Footer({
     const year = new Date().getFullYear();
 
     return (
-        <footer className="bg-gray-900 text-gray-300 w-full mt-8">
+        <footer className="bg-gray-900 text-gray-300 w-full">
             <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
 
                 <div className="text-center md:text-left">

@@ -1,11 +1,9 @@
 import { useState } from "react"
-import Menu from "../componentes/menuTop"
-import BotaoSalas from "../componentes/botaoSalas"
-import ReservaSala from "../componentes/reservaSala"
-import SalasReservadas from "../componentes/salasReservadas"
-import Foot from "../componentes/Footer"
+import { BotaoSalas } from "../../../componentes/SalasReservadas/botaoSalas"
+import { ReservaSala } from "../../../componentes/SalasReservadas/reservaSala"
+import { SalasReservadasCalendar } from "../../../componentes/SalasReservadas/salasReservadas"
 
-export default function Salas() {
+export function SalasReservadas() {
     const [selected, setSelected] = useState("Minhas Salas")
     const user = JSON.parse(localStorage.getItem("user"));
     const userTipo = user?.type || "Visualizador"
@@ -13,14 +11,12 @@ export default function Salas() {
     return (
         <div className="flex flex-col min-h-screen justify-between items-center">
             <div className="flex flex-col justify-center items-center w-full">
-                <Menu />
                 <BotaoSalas onSelect={setSelected} />
 
                 {userTipo === "Administrador" && selected === "Adicionar" && <ReservaSala />}
-                {selected === "Minhas Salas" && <SalasReservadas />}
+                {selected === "Minhas Salas" && <SalasReservadasCalendar />}
 
             </div>
-            <Foot/>
         </div>
     )
 }

@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import Menu from "../componentes/menuTop";
-import Foot from "../componentes/Footer";
-import { CONFIG } from "../config";
+import { CONFIG } from "../../../config";
 
-export default function AdcionaBem() {
+export function CadastrarSala() {
     const [nomeSala, setNomeSala] = useState("");
     const [tipoSala, setTipoSala] = useState("");
     const [loading, setLoading] = useState(false);
@@ -57,7 +55,6 @@ export default function AdcionaBem() {
 
     return (
         <div className="flex flex-col min-h-screen">
-            <Menu />
             <main className="flex-grow flex items-center justify-center px-4 py-8 bg-gray-50">
                 <form
                     onSubmit={handleSubmit}
@@ -120,7 +117,6 @@ export default function AdcionaBem() {
                     </div>
                 </form>
             </main>
-            <Foot />
         </div>
     );
 }

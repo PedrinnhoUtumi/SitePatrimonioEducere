@@ -11,9 +11,9 @@ import {
     X,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { CONFIG } from "../config";
+import { CONFIG } from "../../config";
 
-export default function MenuTop() {
+export function MenuTop() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [openEditor, setOpenEditor] = useState(false);
     const [previewPhoto, setPreviewPhoto] = useState(null);
@@ -57,69 +57,6 @@ export default function MenuTop() {
         return regex.test(senha);
     };
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-
-    //     if (updatedUser.senha) {
-    //         if (!validarSenha(updatedUser.senha)) {
-    //             setErroSenha(
-    //                 "A senha deve ter no mínimo 8 caracteres, uma letra maiúscula e um caractere especial."
-    //             );
-    //             return;
-    //         } else {
-    //             setErroSenha("");
-    //         }
-    //     }
-
-    //     setLoading(true);
-
-    //     try {
-    //         const formData = new FormData();
-    //         if (!updatedUser.id) {
-    //             alert("ID do usuário não definido. Recarregue a página.");
-    //             return;
-    //         }
-    //         formData.append("id", updatedUser.id);
-    //         formData.append("nome", updatedUser.nome);
-    //         formData.append("cpf", updatedUser.cpf);
-    //         formData.append("rg", updatedUser.rg);
-    //         formData.append("email", updatedUser.email);
-
-    //         if (updatedUser.senha && updatedUser.senha.trim() !== "") {
-    //             formData.append("senha", updatedUser.senha);
-    //         }
-
-    //         if (updatedUser.photo && typeof updatedUser.photo !== "string") {
-    //             formData.append("photo", updatedUser.photo);
-    //         }
-
-    //         const response = await fetch(`${CONFIG.API_URL}/users/update`, {
-    //             method: "PUT",
-    //             body: formData,
-    //         });
-
-    //         if (!response.ok) throw new Error("Erro no cadastro: " + response.message);
-
-    //         const data = await response.json();
-    //         localStorage.setItem("user", JSON.stringify(data.user));
-
-    //         alert("Usuário atualizado com sucesso!");
-
-    //         setUpdatedUser((prev) => ({
-    //             ...prev,
-    //             senha: "",
-    //             photo: null,
-    //             id: prev.id
-    //         }));
-
-    //         window.location.reload();
-    //     } catch (err) {
-    //         console.error("Erro ao cadastrar usuário:", err);
-    //         alert("Erro ao cadastrar usuário. Tente novamente.");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
     const handleSubmit = async (e) => {
         e.preventDefault();
 

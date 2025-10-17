@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 import SyncLoader from "react-spinners/SyncLoader";
-import { CONFIG } from "../config";
+import { CONFIG } from "../../config";
 
-export default function VerificaBem() {
+export function VerificaBem() {
     const [bens, setBens] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

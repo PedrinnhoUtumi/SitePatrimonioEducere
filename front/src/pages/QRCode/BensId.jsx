@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import SyncLoader from "react-spinners/SyncLoader";
 import { QRCodeCanvas } from "qrcode.react";
-import { CONFIG } from "../config";
+import { CONFIG } from "../../config";
 
 export default function BemDetalhe() {
   const { id } = useParams(); 

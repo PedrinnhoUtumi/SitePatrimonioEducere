@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-export default function BotaoBem({ onSelect }) {
+export function BotaoSalas({ onSelect }) {
     const [selected, setSelected] = useState("Minhas Salas");
 
     const user = JSON.parse(localStorage.getItem("user"));
