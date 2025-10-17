@@ -5,7 +5,6 @@ import fileupload from 'express-fileupload'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-// Corrigindo __dirname para ES Modules
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
@@ -17,18 +16,14 @@ import * as salasReservadasController from './src/modules/salasReservadas/salas_
 const app = express()
 dotenv.config()
 
-// Middleware
 app.use(cors())
 app.use(express.json())
 app.use(fileupload())
 
-// Bootstrap
 app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')))
 
-// ✅ Corrigido: Servindo a pasta de imagens de forma correta
 app.use('/imagens', express.static(path.join(__dirname, 'src', 'imagens')))
 
-// Rotas
 app.post('/users/cadastro', usersController.cadastroUser)
 app.post('/users/login', usersController.loginUser)
 app.put('/users/update', usersController.atualizarUser)

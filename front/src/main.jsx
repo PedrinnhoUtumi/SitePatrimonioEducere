@@ -22,29 +22,31 @@ import { Layout } from "./pages/_Layout";
 
 const rotas = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Layout />}>
+    <>
       <Route index element={<Login />} />
-
-      <Route element={<RotaProtegida tiposPermitidos={["Visualizador", "Administrador"]} />}>
-        <Route path="/bens" element={<CadastroBem />} />
-      </Route>
-
       <Route element={< RotaProtegida tiposPermitidos={["Administrador"]} />}>
         <Route path="/cadastro" element={<Cadastro />} />
       </Route>
+      <Route path="/" element={<Layout />}>
 
-      <Route element={< RotaProtegida tiposPermitidos={["Visualizador", "Administrador"]} />}>
-        <Route path="/salas" element={<SalasReservadas />} />
+        <Route element={<RotaProtegida tiposPermitidos={["Visualizador", "Administrador"]} />}>
+          <Route path="/bens" element={<CadastroBem />} />
+        </Route>
+
+
+        <Route element={< RotaProtegida tiposPermitidos={["Visualizador", "Administrador"]} />}>
+          <Route path="/salas" element={<SalasReservadas />} />
+        </Route>
+
+        <Route element={< RotaProtegida tiposPermitidos={["Administrador"]} />}>
+          <Route path="/cadastroSala" element={<CadastrarSala />} />
+        </Route>
+        <Route path="/bensid/:id" element={<PaginaBem />} />
+        <Route path="/nao-autorizado" element={<NaoAutorizado />} />
+        <Route path="/*" element={<PaginaNaoEncontrada />} />
+
       </Route>
-
-      <Route element={< RotaProtegida tiposPermitidos={["Administrador"]} />}>
-        <Route path="/cadastroSala" element={<CadastrarSala />} />
-      </Route>
-      <Route path="/bensid/:id" element={<PaginaBem />} />
-      <Route path="/nao-autorizado" element={<NaoAutorizado />} />
-      <Route path="/*" element={<PaginaNaoEncontrada />} />
-
-    </Route>
+    </>
   )
 );
 
