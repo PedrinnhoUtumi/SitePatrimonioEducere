@@ -85,7 +85,6 @@ export function MenuTop() {
 
             if (updatedUser.senha) formData.append("senha", updatedUser.senha);
 
-            // Só envia foto se for um arquivo novo
             if (updatedUser.photo && typeof updatedUser.photo !== "string") {
                 formData.append("photo", updatedUser.photo);
             }
@@ -102,7 +101,6 @@ export function MenuTop() {
 
             alert("Usuário atualizado com sucesso!");
 
-            // Reseta apenas campos de senha e preview, sem mexer no id nem na foto do user
             setUpdatedUser((prev) => ({
                 ...prev,
                 senha: "",
@@ -171,11 +169,11 @@ export function MenuTop() {
                             <img
                                 src={`http://localhost:3001/imagens/${user.photo}`}
                                 alt="Foto de perfil"
-                                className="w-8 h-8 rounded-full object-cover"
+                                className="w-8 h-8 rounded-full object-cover cursor-pointer"
                                 onClick={handleOpenEditor}
                             />
                         ) : (
-                            <CircleUserIcon size={28} onClick={handleOpenEditor} />
+                            <CircleUserIcon size={28} onClick={handleOpenEditor} className="cursor-pointer" />
                         )}
                         <span className="font-semibold">{userName}</span>
                     </div>
@@ -196,7 +194,6 @@ export function MenuTop() {
                                 </h2>
 
                                 <div className="flex flex-col gap-4">
-                                    {/* CPF */}
                                     <div className="flex flex-col">
                                         <label className="text-sm font-medium mb-1">CPF</label>
                                         <input
@@ -214,7 +211,6 @@ export function MenuTop() {
                                         />
                                     </div>
 
-                                    {/* RG */}
                                     <div className="flex flex-col">
                                         <label className="text-sm font-medium mb-1">RG</label>
                                         <input
@@ -231,7 +227,6 @@ export function MenuTop() {
                                         />
                                     </div>
 
-                                    {/* Email */}
                                     <div className="flex flex-col">
                                         <label className="text-sm font-medium mb-1">Email</label>
                                         <input
@@ -248,7 +243,6 @@ export function MenuTop() {
                                         />
                                     </div>
 
-                                    {/* Nome */}
                                     <div className="flex flex-col">
                                         <label className="text-sm font-medium mb-1">Nome</label>
                                         <input
@@ -265,7 +259,6 @@ export function MenuTop() {
                                         />
                                     </div>
 
-                                    {/* Senha */}
                                     <div className="flex flex-col relative">
                                         <label className="text-sm font-medium mb-1">Senha</label>
                                         <input
@@ -296,7 +289,6 @@ export function MenuTop() {
                                         <span className="text-xs text-red-400">{erroSenha}</span>
                                     )}
 
-                                    {/* Foto de perfil */}
                                     <div className="flex flex-col">
                                         <label className="text-sm font-medium mb-1">
                                             Foto de perfil

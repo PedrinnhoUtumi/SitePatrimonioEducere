@@ -98,23 +98,21 @@ export function Cadastro() {
     return (
         <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#2f4a5a] via-[#253544] to-[#0b1620] relative text-white overflow-x-hidden">
 
-            {/* Botão menu */}
             <button
                 onClick={() => setAbrirMenu(!abrirMenu)}
                 className="fixed top-4 left-4 z-50 p-2 rounded-lg bg-black/70 hover:bg-black/90 text-white transition-all duration-300 shadow-md"
             >
-                {abrirMenu ? <X size={26} /> : <MenuIcon size={26} />}
+                {abrirMenu ? <X size={26} className="hover:text-red-400" /> : <MenuIcon size={26} className="hover:text-blue-400" />}
             </button>
 
-            {/* Menu lateral */}
             <nav
                 className={`
-          fixed top-0 left-0 h-full w-64
-          bg-gray-900 text-white shadow-2xl rounded-r-3xl
-          transform transition-transform duration-300 ease-in-out
-          ${abrirMenu ? "translate-x-0" : "-translate-x-full"}
-          flex flex-col justify-between p-6 z-40
-        `}
+                    fixed top-0 left-0 h-full w-64
+                    bg-gray-900 text-white shadow-2xl rounded-r-3xl
+                    transform transition-transform duration-300 ease-in-out
+                    ${abrirMenu ? "translate-x-0" : "-translate-x-full"}
+                    flex flex-col justify-between p-6 z-40
+                `}
             >
                 <div className="flex flex-col gap-8 mt-10">
                     <Link
@@ -144,17 +142,19 @@ export function Cadastro() {
                     )}
                 </div>
 
-                {/* Footer no menu */}
                 <footer className="mt-auto border-t border-gray-700 pt-5 flex flex-col items-center gap-3 text-gray-400 text-xs">
 
-                    {/* Usuário + Sair */}
                     <div className="flex flex-col items-center gap-2">
                         <div className="px-3 py-1 rounded-lg bg-gray-800/60 text-blue-300 text-sm font-semibold shadow-inner">
                             {created_by}
                         </div>
                         <button
                             onClick={handleLogout}
-                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm transition-all shadow-md"
+                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg 
+                            bg-red-600 text-white text-sm shadow-md 
+                            border border-red-600/0 
+                            hover:border-red-600 hover:bg-white hover:text-red-600 
+                            transition-all duration-200"
                             title="Sair"
                         >
                             <LogOutIcon size={16} />
@@ -162,7 +162,6 @@ export function Cadastro() {
                         </button>
                     </div>
 
-                    {/* Links GitHub */}
                     <div className="flex items-center justify-center gap-2 mt-2 text-[11px] text-gray-500 flex-wrap">
                         <a
                             href="https://github.com/saraqwe123"
@@ -190,7 +189,6 @@ export function Cadastro() {
                         </a>
                     </div>
 
-                    {/* Nome da fundação */}
                     <div className="text-[10px] text-gray-600 mt-1 mb-1 text-center">
                         © {year} Fundação Educere
                     </div>
@@ -198,7 +196,6 @@ export function Cadastro() {
 
             </nav>
 
-            {/* Conteúdo principal */}
             <main className="flex flex-1 justify-center items-center p-6">
                 <div className="relative w-full max-w-md sm:max-w-lg md:max-w-xl">
                     <div className="relative rounded-2xl overflow-hidden shadow-2xl bg-white/10 backdrop-blur-xl border border-white/10 p-8 md:p-10">

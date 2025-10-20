@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CONFIG } from "../../config";
-import { Form } from "react-router-dom";
+import { NumericFormat } from "react-number-format";
+
 
 export function AdcionaBem() {
     const [loading, setLoading] = useState(false);
@@ -28,7 +29,7 @@ export function AdcionaBem() {
         data_Aquisicao: "",
         data_Baixa: "",
         justificativaBaixa: "Transferência",
-        depreciacao: "0",
+        depreciacao: "",
         valorAquisicao: "",
         valorResidual: "",
         marca: "",
@@ -223,15 +224,21 @@ export function AdcionaBem() {
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Depreciação anual (%)</label>
-                        <input
-                            name="depreciacao"
+                        <NumericFormat
                             value={form.depreciacao}
-                            onChange={handleChange}
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            max="100"
+                            onValueChange={(values) => {
+                                let { value } = values;
+                                if (value > 100) {    
+                                    value = 100;
+                                }
+                                setForm({ ...form, depreciacao: value });
+                            }}
+                            thousandSeparator="."
+                            decimalSeparator=","
+                            suffix="%"
+                            allowNegative={false}
                             className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
+                            decimalScale={2}
                         />
                     </div>
                 </div>
@@ -239,42 +246,36 @@ export function AdcionaBem() {
                 <div className="flex flex-col gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Valor da aquisição</label>
-                        <input
-                            name="valorAquisicao"
+                        <NumericFormat
                             value={form.valorAquisicao}
-                            onChange={handleChange}
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
-                            onBlur={(e) => {
-                                let value = parseFloat(e.target.value);
-                                if (!isNaN(value)) {
-                                    e.target.value = value.toFixed(2).replace(/\.00$/, "").replace(/(\.\d)0$/, "$1");
-                                    handleChange(e);
-                                }
+                            onValueChange={(values) => {
+                                const { value } = values;
+                                setForm({ ...form, valorAquisicao: value });
                             }}
+                            thousandSeparator="."
+                            decimalSeparator=","
+                            prefix="R$ "
+                            allowNegative={false}
+                            className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
+                            decimalScale={2}
                         />
                     </div>
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Valor residual</label>
-                        <input
-                            name="valorResidual"
+                        <NumericFormat
                             value={form.valorResidual}
-                            onChange={handleChange}
-                            disabled={!form.valorAquisicao}
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
-                            onBlur={(e) => {
-                                let value = parseFloat(e.target.value);
-                                if (!isNaN(value)) {
-                                    e.target.value = value.toFixed(2).replace(/\.00$/, "").replace(/(\.\d)0$/, "$1");
-                                    handleChange(e);
-                                }
+                            onValueChange={(values) => {
+                                const { value } = values;
+                                setForm({ ...form, valorResidual: value });
                             }}
+                            thousandSeparator="."
+                            decimalSeparator=","
+                            prefix="R$ "
+                            allowNegative={false}
+                            className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
+                            decimalScale={2}
+                            disabled={!form.valorAquisicao}
                         />
                     </div>
 

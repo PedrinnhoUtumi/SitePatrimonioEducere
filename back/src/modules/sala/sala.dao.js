@@ -1,14 +1,14 @@
 import { supabase } from '../../infra/bd.js'
 
-export default class HighlightDao{
-    constructor(){
+export default class SalasDao {
+    constructor() {
         this.table = 'sala'
     }
-    
-    async findAll(){
-        const {data, error} = await supabase
-        .from(this.table)
-        .select('*')
+
+    async findAll() {
+        const { data, error } = await supabase
+            .from(this.table)
+            .select('*')
 
         if (error) throw error;
         return data;
@@ -17,16 +17,31 @@ export default class HighlightDao{
     async addSala(body) {
         const insertObj = {};
         Object.keys(body).forEach((k) => {
-        if (body[k] !== undefined) insertObj[k] = body[k];
+            if (body[k] !== undefined) insertObj[k] = body[k];
         });
 
         const { data, error } = await supabase
-        .from(this.table)
-        .insert([insertObj])
-        .select()
-        .maybeSingle();
+            .from(this.table)
+            .insert([insertObj])
+            .select()
+            .maybeSingle();
 
         if (error) throw error;
         return data;
+    }
+
+    async deleteSala(id) {
+        const { data, error } = await supabase
+            .from(this.table)
+            .delete()
+            .eq('id_sala', id)        
+            .select('id_sala');       
+
+        if (error) {
+            console.error('Erro ao deletar sala:', error);
+            return false;
+        }
+
+        return data && data.length > 0;
     }
 }

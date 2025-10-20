@@ -1,4 +1,3 @@
-// src/componentes/Layout/Pagina.jsx
 export function Pagina({ children, row = false, className = "" }) {
   return (
     <div

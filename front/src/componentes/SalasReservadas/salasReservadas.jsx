@@ -23,6 +23,7 @@ export function SalasReservadasCalendar() {
     const [checkTime, setCheckTime] = useState("");
     const [checkResult, setCheckResult] = useState(null);
 
+
     useEffect(() => {
         const controller = new AbortController();
         async function fetchAll() {
@@ -131,6 +132,32 @@ export function SalasReservadasCalendar() {
         return { left: `${(leftMin / minutesTotal) * 100}%`, width: `${(durMin / minutesTotal) * 100}%` };
     }
 
+    function computeStyleForReservationWeek(reservation) {
+        if (!reservation || !reservation.start || !reservation.end) return null;
+        const days = weekDays.map(d => (d instanceof Date ? d : new Date(d)));
+
+        const msPerDay = 24 * 60 * 60 * 1000;
+
+        const startDayMs = new Date(reservation.start).setHours(0, 0, 0, 0);
+        const endDayMs = new Date(reservation.end).setHours(0, 0, 0, 0);
+
+        const firstDayMs = new Date(days[0]).setHours(0, 0, 0, 0);
+        const lastDayMs = new Date(days[days.length - 1]).setHours(0, 0, 0, 0);
+
+        if (endDayMs < firstDayMs || startDayMs > lastDayMs) return null;
+
+        const startIdx = Math.max(0, Math.floor((startDayMs - firstDayMs) / msPerDay));
+        const endIdx = Math.min(days.length - 1, Math.floor((endDayMs - firstDayMs) / msPerDay));
+
+        const totalDays = days.length;
+        const leftPercent = (startIdx / totalDays) * 100;
+        const widthPercent = ((endIdx - startIdx + 1) / totalDays) * 100;
+
+        return { left: `${leftPercent}%`, width: `${widthPercent}%`, startIdx, endIdx };
+    }
+
+
+
     function fmtHour(date) { if (!date) return ""; return new Date(date).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); }
     function fmtDate(date) { if (!date) return ""; return new Date(date).toLocaleDateString("pt-BR"); }
 
@@ -227,20 +254,33 @@ export function SalasReservadasCalendar() {
                             <div className="sticky top-0 bg-white z-10 border-b">
                                 <div className="grid" style={{ gridTemplateColumns: `200px repeat(${hours.length}, 1fr)` }}>
                                     <div className="p-3 font-semibold">Salas / Horas</div>
-                                    {hours.map(h => (<div key={h} className="p-2 text-center text-xs border-l">{h}:00</div>))}
+                                    {hours.map(h => (
+                                        <div key={h} className="p-2 text-center text-xs border-l text-gray-600 bg-gray-50">
+                                            {h}:00
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
 
                             <div>
                                 {salas.map(sala => (
-                                    <div key={sala._key} className="grid items-start" style={{ gridTemplateColumns: `200px repeat(${hours.length}, 1fr)` }}>
-                                        <div className="p-3 border-b  border-r">
-                                            <div className="font-medium h-[8vh]">{sala.nome}</div>
+                                    <div
+                                        key={sala._key}
+                                        className="grid items-start"
+                                        style={{ gridTemplateColumns: `200px repeat(${hours.length}, 1fr)` }}
+                                    >
+                                        <div className="p-3 flex flex-col justify-center border-b border-r bg-gray-50/40">
+                                            <div className="font-medium h-[8vh] flex items-center">{sala.nome}</div>
                                         </div>
 
-                                        <div className="relative h-18 border-b border-r" style={{ gridColumn: "2 / -1" }}>
+                                        <div
+                                            className="relative border-b border-r bg-white flex flex-col items-center"
+                                            style={{ gridColumn: "2 / -1" }}
+                                        >
                                             <div className="absolute inset-0 flex pointer-events-none">
-                                                {hours.map((h, idx) => (<div key={idx} className="flex-1 border-l border-slate-100" />))}
+                                                {hours.map((_, idx) => (
+                                                    <div key={idx} className="flex-1 border-l border-slate-100" />
+                                                ))}
                                             </div>
 
                                             {sala.reservas.map((r, idx) => {
@@ -251,31 +291,39 @@ export function SalasReservadasCalendar() {
 
                                                 const startDateStr = fmtDate(r.start);
                                                 const endDateStr = fmtDate(r.end);
-                                                const dateLabel = startDateStr === endDateStr ? startDateStr : `${startDateStr} → ${endDateStr}`;
+                                                const dateLabel =
+                                                    startDateStr === endDateStr ? startDateStr : `${startDateStr} → ${endDateStr}`;
 
                                                 return (
                                                     <div
                                                         key={resKey}
-                                                        className="absolute top-3 h-14 rounded-md text-white text-sm flex items-center px-3 overflow-hidden"
-                                                        style={{ left: style.left, width: style.width, ...blockStyle }}
+                                                        className="absolute top-2 h-14 rounded-xl text-white text-sm flex items-center justify-between px-3 shadow-md hover:shadow-lg transition-all duration-200"
+                                                        style={{
+                                                            left: style.left,
+                                                            width: style.width,
+                                                            background: "linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)",
+                                                        }}
                                                     >
-                                                        <div className="flex flex-col leading-tight flex-1">
-                                                            <span className="font-semibold text-sm truncate">{responsavel}</span>
-                                                            <span className="text-xs opacity-90">{dateLabel} · {fmtHour(r.start)} — {fmtHour(r.end)}</span>
+                                                        <div className="flex flex-col flex-1 leading-tight overflow-hidden">
+                                                            <span className="font-semibold truncate">{responsavel}</span>
+                                                            <span className="text-xs opacity-90 truncate">
+                                                                {dateLabel} · {fmtHour(r.start)} — {fmtHour(r.end)}
+                                                            </span>
                                                         </div>
+
                                                         <button
-                                                            className="ml-2 bg-transparent hover:text-red-500 text-white px-2 py-1 rounded"
+                                                            className="ml-3 flex items-center justify-center w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
                                                                 if (window.confirm("Deseja excluir esta reserva?")) {
                                                                     handleDelete(r.id_reserva);
                                                                 }
                                                             }}
+                                                            title="Excluir reserva"
                                                         >
-                                                            <Trash />
+                                                            <Trash size={14} />
                                                         </button>
                                                     </div>
-
                                                 );
                                             })}
                                         </div>
@@ -286,66 +334,86 @@ export function SalasReservadasCalendar() {
                     ) : (
                         <div className="min-w-[900px]">
                             <div className="sticky top-0 bg-white z-10 border-b">
-                                <div className="grid" style={{ gridTemplateColumns: `200px repeat(${weekDays.length}, 1fr)` }}>
+                                <div
+                                    className="grid"
+                                    style={{ gridTemplateColumns: `200px repeat(${weekDays.length}, 1fr)` }}
+                                >
                                     <div className="p-3 font-semibold">Salas / Dias</div>
-                                    {weekDays.map(d => (<div key={d.toISOString()} className="p-2 text-center text-xs border-l w-36"><div>{d.toLocaleDateString()}</div><div className="text-xs text-slate-500">{d.toLocaleDateString(undefined, { weekday: "short" })}</div></div>))}
+                                    {weekDays.map((day) => (
+                                        <div key={day.toISOString()} className="p-2 text-center text-xs border-l">
+                                            <div>{day.toLocaleDateString()}</div>
+                                            <div className="text-xs text-slate-500">
+                                                {day.toLocaleDateString(undefined, { weekday: "short" })}
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
 
                             <div>
-                                {salas.map(sala => (
-                                    <div key={sala._key} className="grid items-start" style={{ gridTemplateColumns: `200px repeat(${weekDays.length}, 1fr)` }}>
-                                        <div className="p-3 border-b border-r h-28">
+                                {salas.map((sala) => (
+                                    <div
+                                        key={sala._key}
+                                        className="grid items-start"
+                                        style={{ gridTemplateColumns: `200px repeat(${weekDays.length}, 1fr)` }}
+                                    >
+                                        <div className="p-3 border-b h-[9vh] border-r bg-gray-50/40 flex items-center">
                                             <div className="font-medium">{sala.nome}</div>
                                         </div>
 
-                                        {weekDays.map(d => {
-                                            const dayStart = new Date(d); dayStart.setHours(0, 0, 0, 0);
-                                            const dayEnd = new Date(d); dayEnd.setHours(23, 59, 59, 999);
-                                            const reservasDoDia = sala.reservas.filter(r => r.start && r.end && overlap(r.start, r.end, dayStart, dayEnd));
+                                        {weekDays.map((day, dayIdx) => {
+                                            const dayStart = new Date(day);
+                                            dayStart.setHours(0, 0, 0, 0);
+                                            const nextDay = new Date(dayStart);
+                                            nextDay.setDate(nextDay.getDate() + 1);
+
+                                            const reservasDia = sala.reservas.filter((r) =>
+                                                overlap(r.start, r.end, dayStart, nextDay)
+                                            );
+
                                             return (
-                                                <div key={d.toISOString()} className="p-2 border-l border-b h-28 w-full sm:w-36">
-                                                    {reservasDoDia.length === 0 ? (
-                                                        <div className="text-xs text-slate-400">— livre —</div>
-                                                    ) : (
-                                                        <div className="flex flex-wrap gap-2">
-                                                            {reservasDoDia.map((r, i) => {
-                                                                const responsavel = getResponsible(r);
-                                                                const startDateStr = fmtDate(r.start);
-                                                                const endDateStr = fmtDate(r.end);
-                                                                const dateLabel = startDateStr === endDateStr ? startDateStr : `${startDateStr} → ${endDateStr}`;
-                                                                const keyRes = `${sala._key}-week-${d.toISOString()}-${i}`;
-                                                                return (
-                                                                    <div
-                                                                        key={keyRes}
-                                                                        title={`${responsavel} — ${dateLabel} — ${fmtHour(r.start)} — ${fmtHour(r.end)}`}
-                                                                        className="p-2 rounded text-sm text-white"
-                                                                        style={{ minWidth: 120, ...blockStyle }}
-                                                                        onClick={() => console.log(r.id_reserva)}
-                                                                    >
-                                                                        <div className="font-semibold truncate">{responsavel}</div>
-                                                                        <div className="flex items-center justify-between mt-1">
-                                                                            <span className="text-xs opacity-90">
-                                                                                {dateLabel} · {fmtHour(r.start)} — {fmtHour(r.end)}
-                                                                            </span>
-
-                                                                            <button
-                                                                                type="button"
-                                                                                className="ml-2 text-white hover:text-red-500 transition-colors"
-                                                                                onClick={(e) => {
-                                                                                    e.stopPropagation();
-                                                                                    if (window.confirm("Deseja excluir esta reserva?")) {
-                                                                                        handleDelete(r.id_reserva);
-                                                                                    }
-                                                                                }}
-                                                                            >
-                                                                                <Trash className="w-4 h-4" />
-                                                                            </button>
-                                                                        </div>
+                                                <div
+                                                    key={dayIdx}
+                                                    className="border-b border-r min-h-[9vh] flex flex-col items-center justify-center text-center relative"
+                                                >
+                                                    {reservasDia.length > 0 ? (
+                                                        reservasDia.map((r, idx) => (
+                                                            <div
+                                                                key={idx}
+                                                                className="w-11/12 h-[8vh] flex flex-col justify-center items-center rounded-lg text-white text-xs p-2 shadow-md mb-1"
+                                                                style={blockStyle}
+                                                            >
+                                                                <div className="font-semibold truncate">
+                                                                    {getResponsible(r)}
+                                                                </div>
+                                                                <div className="opacity-90 text-[11px] truncate">
+                                                                    {fmtHour(r.start)} — {fmtHour(r.end)}
+                                                                </div>
+                                                                {r.descricao && r.descricao.trim() !== "" ? (
+                                                                    <div className="opacity-90 text-[11px] truncate">
+                                                                        {r.descricao}
                                                                     </div>
+                                                                ) : (
+                                                                    <div className="opacity-50 text-[11px] italic">Sem descrição</div>
+                                                                )}
 
-                                                                );
-                                                            })}
+                                                                <button
+                                                                    className="absolute top-2 right-2 bg-white/10 hover:bg-white/20 rounded p-1"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        if (window.confirm("Deseja excluir esta reserva?")) {
+                                                                            handleDelete(r.id_reserva);
+                                                                        }
+                                                                    }}
+                                                                    title="Excluir reserva"
+                                                                >
+                                                                    <Trash size={12} />
+                                                                </button>
+                                                            </div>
+                                                        ))
+                                                    ) : (
+                                                        <div className="text-xs text-slate-400 select-none">
+                                                            — livre —
                                                         </div>
                                                     )}
                                                 </div>
@@ -355,7 +423,8 @@ export function SalasReservadasCalendar() {
                                 ))}
                             </div>
                         </div>
-                    )}
+                    )
+                    }
                 </div>
             </div>
         </div>

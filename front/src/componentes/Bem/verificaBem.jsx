@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 import SyncLoader from "react-spinners/SyncLoader";
 import { CONFIG } from "../../config";
+import { NumericFormat } from "react-number-format";
 
 export function VerificaBem() {
     const [bens, setBens] = useState([]);
@@ -57,14 +58,6 @@ export function VerificaBem() {
         }).format(value);
     }
 
-    function parseNumberBR(str) {
-        if (!str) return null;
-        const normalized = str.replace(/\./g, "").replace(",", ".");
-        const num = parseFloat(normalized);
-        if (isNaN(num) || num < 0) return null;
-        return num;
-    }
-
     const toInputDate = (iso) => {
         if (!iso) return "";
         const d = new Date(iso);
@@ -91,6 +84,7 @@ export function VerificaBem() {
         const { name, value } = e.target;
         setEditingBem((prev) => ({ ...prev, [name]: value }));
     };
+
 
     const handleSave = async () => {
         if (!editingBem) return;
@@ -300,12 +294,14 @@ export function VerificaBem() {
                                         onChange={handleChange}
                                         className="border rounded px-2 py-1"
                                     >
-                                        <option value="">Selecione...</option>
-                                        <option value="Móveis">Móveis</option>
-                                        <option value="Equipamentos">Equipamentos</option>
-                                        <option value="Veículos">Veículos</option>
-                                        <option value="Imóveis">Imóveis</option>
-                                        <option value="Outros">Outros</option>
+                                        <option>Equipamentos</option>
+                                        <option>Móveis</option>
+                                        <option>Máquinas</option>
+                                        <option>Veículos</option>
+                                        <option>Eletrodomésticos</option>
+                                        <option>Utensílios</option>
+                                        <option>Eletroeletônicos</option>
+                                        <option>Equipamentos de informática</option>
                                     </select>
                                 </label>
 
@@ -337,11 +333,56 @@ export function VerificaBem() {
                                         onChange={handleChange}
                                         className="border rounded px-2 py-1"
                                     >
-                                        <option value="">Selecione...</option>
-                                        <option value="Almoxarifado">Almoxarifado</option>
-                                        <option value="Escritório">Escritório</option>
-                                        <option value="Laboratório">Laboratório</option>
-                                        <option value="Sala de Aula">Sala de Aula</option>
+                                        <option>Prototipagem</option>
+                                        <option>Arquivo morto (Subsolo)</option>
+                                        <option>Sala 001 (Administrativo)</option>
+                                        <option>Sala 002 (Auditório)</option>
+                                        <option>Sala 003 (Magvia)</option>
+                                        <option>Sala 004 (Data Center)</option>
+                                        <option>Sala 005</option>
+                                        <option>Sala 006</option>
+                                        <option>Sala 007</option>
+                                        <option>Sala 101</option>
+                                        <option>Sala 102</option>
+                                        <option>Sala 103</option>
+                                        <option>Sala 104</option>
+                                        <option>Sala 105</option>
+                                        <option>Sala 106</option>
+                                        <option>Sala 107 (Modelagem de negócio)</option>
+                                        <option>Sala 108 (Coworking)</option>
+                                        <option>Sala 109 (Planejamento)</option>
+                                        <option>Sala 110 (Almoxerifado)</option>
+                                        <option>Sala 111 (Sala google)</option>
+                                        <option>Sala 112</option>
+                                        <option>Sala 113</option>
+                                        <option>Sala 114 (Estúdio)</option>
+                                        <option>Sala 115</option>
+                                        <option>Sala 201</option>
+                                        <option>Sala 202</option>
+                                        <option>Sala 203 (Lab. programação)</option>
+                                        <option>Sala 203 (Sala de treinamento)</option>
+                                        <option>Sala 204 (Lab. mecânica)</option>
+                                        <option>Sala 205 (Lab. Eletrônica)</option>
+                                        <option>Sala 206</option>
+                                        <option>Sala 207</option>
+                                        <option>Sala 208</option>
+                                        <option>Sala 209</option>
+                                        <option>Sala 210</option>
+                                        <option>Sala 211</option>
+                                        <option>Sala 212 (Lab. Ciências Aplicadas)</option>
+                                        <option>Sala 213</option>
+                                        <option>Copa Térreo</option>
+                                        <option>Copa Primeiro andar</option>
+                                        <option>Copa Segundo andar</option>
+                                        <option>Copa Terceiro andar (Cozinha 2)</option>
+                                        <option>Corredor Térreo</option>
+                                        <option>Corredor Primeiro andar</option>
+                                        <option>Corredor Segundo andar</option>
+                                        <option>Corredor/Churrasqueira Terceiro andar</option>
+                                        <option>DML Térreo</option>
+                                        <option>DML Primeiro andar</option>
+                                        <option>DML Segundo andar</option>
+                                        <option>DML Terceiro andar</option>
                                     </select>
                                 </label>
 
@@ -353,67 +394,64 @@ export function VerificaBem() {
                                         onChange={handleChange}
                                         className="border rounded px-2 py-1"
                                     >
-                                        <option value="">Selecione...</option>
-                                        <option value="Novo">Novo</option>
-                                        <option value="Bom">Bom</option>
-                                        <option value="Regular">Regular</option>
-                                        <option value="Ruim">Ruim</option>
-                                        <option value="Inservível">Inservível</option>
+                                        <option>Novo</option>
+                                        <option>Usado recente</option>
+                                        <option>Anos de uso</option>
+                                        <option>Avariado</option>
                                     </select>
                                 </label>
 
                                 <label className="flex flex-col">
                                     <span className="text-sm">Valor Aquisição</span>
-                                    <input
-                                        name="valor_aquisicao"
-                                        type="number"
-                                        value={editingBem.valor_aquisicao ?? ""}
-                                        min="0"
-                                        onChange={handleChange}
-                                        className="border rounded px-2 py-1"
-                                        onBlur={(e) => {
-                                            let value = parseFloat(e.target.value);
-                                            if (!isNaN(value)) {
-                                                e.target.value = value.toFixed(2).replace(/\.00$/, "").replace(/(\.\d)0$/, "$1");
-                                                handleChange(e);
-                                            }
+                                    <NumericFormat
+                                        value={editingBem.valor_aquisicao}
+                                        onValueChange={(values) => {
+                                            const { value } = values;
+                                            setEditingBem({ ...editingBem, valor_aquisicao: value });
                                         }}
-                                        step={0.01}
+                                        thousandSeparator="."
+                                        decimalSeparator=","
+                                        prefix="R$ "
+                                        allowNegative={false}
+                                        className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
+                                        decimalScale={2}
                                     />
                                 </label>
 
                                 <label className="flex flex-col">
                                     <span className="text-sm">Valor Residual</span>
-                                    <input
-                                        name="valor_residual"
-                                        type="number"
-                                        value={editingBem.valor_residual ?? ""}
-                                        min="0"
-                                        onChange={handleChange}
-                                        className="border rounded px-2 py-1"
-                                        disabled={!editingBem.valor_aquisicao}
-                                        onBlur={(e) => {
-                                            let value = parseFloat(e.target.value);
-                                            if (!isNaN(value)) {
-                                                e.target.value = value.toFixed(2).replace(/\.00$/, "").replace(/(\.\d)0$/, "$1");
-                                                handleChange(e);
-                                            }
+                                    <NumericFormat
+                                        value={editingBem.valor_residual}
+                                        onValueChange={(values) => {
+                                            const { value } = values;
+                                            setEditingBem({ ...editingBem, valor_residual: value });
                                         }}
-                                        step={0.01}
+                                        thousandSeparator="."
+                                        decimalSeparator=","
+                                        prefix="R$ "
+                                        allowNegative={false}
+                                        className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
+                                        decimalScale={2}
                                     />
                                 </label>
 
                                 <label className="flex flex-col">
                                     <span className="text-sm">Depreciação (%)</span>
-                                    <input
-                                        name="depreciacao_percent"
-                                        type="number"
-                                        value={editingBem.depreciacao_percent ?? ""}
-                                        onChange={handleChange}
-                                        className="border rounded px-2 py-1"
-                                        max={100}
-                                        step={0.01}
-                                        min={0}
+                                    <NumericFormat
+                                        value={editingBem.depreciacao_percent}
+                                        onValueChange={(values) => {
+                                            let { value } = values;
+                                            if (value > 100) {
+                                                value = 100;
+                                            }
+                                            setEditingBem({ ...editingBem, depreciacao: value });
+                                        }}
+                                        thousandSeparator="."
+                                        decimalSeparator=","
+                                        suffix="%"
+                                        allowNegative={false}
+                                        className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
+                                        decimalScale={2}
                                     />
                                 </label>
 
@@ -463,12 +501,13 @@ export function VerificaBem() {
                                         onChange={handleChange}
                                         className="border rounded px-2 py-1"
                                     >
-                                        <option value="">Selecione...</option>
-                                        <option value="Obsoleto">Obsoleto</option>
-                                        <option value="Danificado">Danificado</option>
-                                        <option value="Perda">Perda</option>
-                                        <option value="Doação">Doação</option>
-                                        <option value="Venda">Venda</option>
+                                        <option>Transferência</option>
+                                        <option>Cessão</option>
+                                        <option>Alienação (Venda)</option>
+                                        <option>Alienação (Permuta)</option>
+                                        <option>Alienação (Doação)</option>
+                                        <option>Destinação final ambientalmente adequada</option>
+                                        <option>Desaparecimento</option>
                                     </select>
                                 </label>
                             </div>

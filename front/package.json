@@ -19,6 +19,7 @@
     "qrcode.react": "^4.2.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-number-format": "^5.4.4",
     "react-router-dom": "^6.30.1",
     "react-spinners": "^0.17.0",
     "selfsigned": "^3.0.1",

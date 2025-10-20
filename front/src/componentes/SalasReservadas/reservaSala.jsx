@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { CONFIG } from "../../config";
 import { v4 as uuidv4 } from "uuid";
 
@@ -145,7 +145,7 @@ export function ReservaSala() {
                 className="w-full max-w-xl bg-white shadow-lg rounded-2xl p-6"
             >
                 <h2 className="text-2xl font-semibold mb-6 text-gray-800 text-center">
-                    Reservar Sala
+                    Reservar <NavLink to={`/deleteSala`} className="text-green-600 hover:text-red-600 transition-colors">Sala</NavLink>
                 </h2>
 
                 <div className="flex flex-col gap-5">

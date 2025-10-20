@@ -19,6 +19,8 @@ import PaginaBem from "./pages/QRCode/BensId"
 import { NaoAutorizado } from "./pages/Extra/NaoAutorizado";
 import { PaginaNaoEncontrada } from "./pages/Extra/PaginaNaoEncontrada";
 import { Layout } from "./pages/_Layout";
+import { DeleteSala } from "./pages/Salas/delete/DeleteSala";
+import { DadosProvider } from "./context/DadosContext";
 
 const rotas = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +29,9 @@ const rotas = createBrowserRouter(
       <Route element={< RotaProtegida tiposPermitidos={["Administrador"]} />}>
         <Route path="/cadastro" element={<Cadastro />} />
       </Route>
+      <Route path="/bensid/:id" element={<PaginaBem />} />
+      <Route path="/nao-autorizado" element={<NaoAutorizado />} />
+      <Route path="/*" element={<PaginaNaoEncontrada />} />
       <Route path="/" element={<Layout />}>
 
         <Route element={<RotaProtegida tiposPermitidos={["Visualizador", "Administrador"]} />}>
@@ -41,10 +46,9 @@ const rotas = createBrowserRouter(
         <Route element={< RotaProtegida tiposPermitidos={["Administrador"]} />}>
           <Route path="/cadastroSala" element={<CadastrarSala />} />
         </Route>
-        <Route path="/bensid/:id" element={<PaginaBem />} />
-        <Route path="/nao-autorizado" element={<NaoAutorizado />} />
-        <Route path="/*" element={<PaginaNaoEncontrada />} />
-
+        <Route element={< RotaProtegida tiposPermitidos={["Administrador"]} />}>
+          <Route path="/deleteSala" element={<DeleteSala />} />
+        </Route>
       </Route>
     </>
   )
@@ -52,6 +56,8 @@ const rotas = createBrowserRouter(
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+    <DadosProvider>
       <RouterProvider router={rotas} />
+    </DadosProvider>
   </StrictMode>
 );

@@ -37,6 +37,7 @@ app.put('/bem/update/:id', bemController.updateBem)
 
 app.post('/salas/add', salasController.addSala)
 app.get('/salas/all', salasController.findAll)
+app.delete('/salas/delete/:id', salasController.deleteSala)
 
 app.get('/salaReservada/findSalas', salasReservadasController.findSalas)
 app.post('/salaReservada/add', salasReservadasController.addReserva)
