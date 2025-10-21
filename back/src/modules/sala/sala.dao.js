@@ -35,7 +35,7 @@ export default class SalasDao {
             .from(this.table)
             .delete()
             .eq('id_sala', id)        
-            .select('id_sala');       
+            .select('id_sala')
 
         if (error) {
             console.error('Erro ao deletar sala:', error);
@@ -44,4 +44,19 @@ export default class SalasDao {
 
         return data && data.length > 0;
     }
+
+    async deleteReservasDaSala(id) {
+        const { error } = await supabase
+            .from("salas_reservadas")
+            .delete()
+            .eq("id_sala", id);
+
+        if (error) {
+            console.error("Erro ao deletar reservas da sala:", error);
+            return false;
+        }
+
+        return true;
+    }
+
 }

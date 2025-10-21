@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { BotaoBem } from "../../componentes/Bem/botaoBem"
-import { AdcionaBem } from "../../componentes/Bem/adicionaBem"
+import { AdicionaBem } from "../../componentes/Bem/adicionaBem"
 import { VerificaBem } from "../../componentes/Bem/verificaBem"
 
 export function CadastroBem() {
@@ -12,7 +12,7 @@ export function CadastroBem() {
                 <BotaoBem onSelect={setSelected} />
 
                 {selected === "Meus Bens" && <VerificaBem />}
-                {selected === "Adicionar" && <AdcionaBem />}
+                {selected === "Adicionar" && <AdicionaBem />}
                 
             </div>
         </div>

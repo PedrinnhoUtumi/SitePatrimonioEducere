@@ -38,15 +38,15 @@ export function ReservaSala() {
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
 
-
-
     useEffect(() => {
         const ac = new AbortController();
         const fetchSalas = async () => {
             setSalasLoading(true);
             setSalasError(null);
             try {
-                const res = await fetch(`${CONFIG.API_URL}/salas/all`, { signal: ac.signal });
+                const res = await fetch(`${CONFIG.API_URL}/salas/all`, {
+                    signal: ac.signal,
+                });
                 if (!res.ok) {
                     const text = await res.text();
                     throw new Error(`Erro ao listar salas: ${res.status} ${text}`);
@@ -99,10 +99,15 @@ export function ReservaSala() {
         setMsg(null);
 
         if (!salaId) return setMsg({ type: "error", text: "Selecione uma sala." });
-        if (!responsavel) return setMsg({ type: "error", text: "Informe o responsável." });
-        if (!dataInicio || !dataFim) return setMsg({ type: "error", text: "Informe início e término." });
+        if (!responsavel)
+            return setMsg({ type: "error", text: "Informe o responsável." });
+        if (!dataInicio || !dataFim)
+            return setMsg({ type: "error", text: "Informe início e término." });
         if (new Date(dataFim) <= new Date(dataInicio)) {
-            return setMsg({ type: "error", text: "Término deve ser depois do início." });
+            return setMsg({
+                type: "error",
+                text: "Término deve ser depois do início.",
+            });
         }
 
         const payload = buildPayload();
@@ -145,7 +150,7 @@ export function ReservaSala() {
                 className="w-full max-w-xl bg-white shadow-lg rounded-2xl p-6"
             >
                 <h2 className="text-2xl font-semibold mb-6 text-gray-800 text-center">
-                    Reservar <NavLink to={`/deleteSala`} className="text-green-600 hover:text-red-600 transition-colors">Sala</NavLink>
+                    Reservar Sala
                 </h2>
 
                 <div className="flex flex-col gap-5">
@@ -156,7 +161,9 @@ export function ReservaSala() {
                         {salasLoading ? (
                             <div className="mt-1 p-2 text-sm">Carregando salas...</div>
                         ) : salasError ? (
-                            <div className="mt-1 p-2 text-red-600 text-sm">Erro: {salasError}</div>
+                            <div className="mt-1 p-2 text-red-600 text-sm">
+                                Erro: {salasError}
+                            </div>
                         ) : (
                             <select
                                 value={salaId}
@@ -175,7 +182,9 @@ export function ReservaSala() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Responsável</label>
+                        <label className="block text-sm font-medium text-gray-700">
+                            Responsável
+                        </label>
                         <input
                             type="text"
                             value={responsavel}
@@ -186,7 +195,10 @@ export function ReservaSala() {
                     </div>
 
                     <div>
-                        <label htmlFor="dataInicio" className="block text-sm font-medium text-gray-700">
+                        <label
+                            htmlFor="dataInicio"
+                            className="block text-sm font-medium text-gray-700"
+                        >
                             Data e hora de início
                         </label>
                         <input
@@ -201,7 +213,10 @@ export function ReservaSala() {
                     </div>
 
                     <div>
-                        <label htmlFor="dataFim" className="block text-sm font-medium text-gray-700">
+                        <label
+                            htmlFor="dataFim"
+                            className="block text-sm font-medium text-gray-700"
+                        >
                             Data e hora de término
                         </label>
                         <input
@@ -213,13 +228,13 @@ export function ReservaSala() {
                             max={
                                 dataInicio
                                     ? formatDateTimeLocal(
-                                        new Date(new Date(dataInicio).getTime() + 3 * 24 * 60 * 60 * 1000)
+                                        new Date(
+                                            new Date(dataInicio).getTime() + 3 * 24 * 60 * 60 * 1000
+                                        )
                                     )
                                     : ""
                             }
-
                             disabled={!dataInicio}
-
                             className="w-full mt-1 p-3 border rounded-xl bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-400"
                             required
                         />
@@ -256,10 +271,11 @@ export function ReservaSala() {
                         + Cadastrar nova sala
                     </Link>
 
+
                     <button
                         type="submit"
                         disabled={loading}
-                        className="px-6 py-2 bg-blue-900 text-white font-medium rounded-lg shadow hover:bg-blue-700 transition disabled:opacity-60"
+                        className="px-6 py-2 bg-blue-900 text-white font-medium rounded-lg shadow border border-blue-900/0 hover:text-blue-900 hover:border-blue-900 hover:bg-white transition disabled:opacity-60"
                     >
                         {loading ? "Enviando..." : "Reservar Sala"}
                     </button>

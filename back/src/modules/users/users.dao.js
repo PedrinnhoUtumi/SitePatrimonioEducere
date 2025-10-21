@@ -36,4 +36,29 @@ export default class UsersDao {
         if (error) throw error;
         return data;    
     }
+    
+    async findAll() {
+        const { data, error } = await supabase
+            .from(this.table)
+            .select('*')
+
+        if (error) throw error;
+        return data;
+    }
+    
+    async deleteUsers(id) {
+        const { data, error } = await supabase
+            .from(this.table)
+            .delete()
+            .eq('id_user', id)        
+            .select('id_user')
+
+        if (error) {
+            console.error('Erro ao deletar usuário:', error);
+            return false;
+        }
+
+        return data && data.length > 0;
+    }
+
 }

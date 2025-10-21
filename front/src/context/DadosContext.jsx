@@ -5,7 +5,7 @@ export const DadosContext = createContext();
 
 export function DadosProvider({ children }) {
     // Estado inicial com estrutura clara
-    const [dados, setDados] = useState({ salas: [], salasReservadas: [], bens: [] });
+    const [dados, setDados] = useState({ salas: [], salasReservadas: [], bens: [], users: [] });
 
     function adicionarDados(novosDadosPorTabela) {
         if (!novosDadosPorTabela || typeof novosDadosPorTabela !== "object") return;
@@ -28,7 +28,7 @@ export function DadosProvider({ children }) {
     }
 
     useEffect(() => {
-        const fetchAPI = async () => {
+        const fetchAPISalas = async () => {
             try {
                 const response = await fetch(`${CONFIG.API_URL}/salas/all`);
                 if (!response.ok) {
@@ -42,7 +42,7 @@ export function DadosProvider({ children }) {
                 }
 
                 else if (json.message && Array.isArray(json.message)) {
-                    adicionarDados({ links: json.message });
+                    adicionarDados({ salas: json.message });
                 }
 
             } catch (err) {
@@ -50,7 +50,33 @@ export function DadosProvider({ children }) {
             }
         };
 
-        fetchAPI();
+        fetchAPISalas();
+    }, []);
+
+    useEffect(() => {
+        const fetchAPIUsers = async () => {
+            try {
+                const response = await fetch(`${CONFIG.API_URL}/users`);
+                if (!response.ok) {
+                    throw new Error("Erro ao buscar os dados do servidor");
+                }
+
+                const json = await response.json();
+
+                if (Array.isArray(json)) {
+                    adicionarDados({ users: json });
+                }
+
+                else if (json.message && Array.isArray(json.message)) {
+                    adicionarDados({ users: json.message });
+                }
+
+            } catch (err) {
+                console.error("❌ Erro na requisição:", err.message);
+            }
+        };
+
+        fetchAPIUsers();
     }, []);
 
     const exportar = {

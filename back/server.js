@@ -24,9 +24,11 @@ app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules', 'boots
 
 app.use('/imagens', express.static(path.join(__dirname, 'src', 'imagens')))
 
+app.get('/users', usersController.findAll)
 app.post('/users/cadastro', usersController.cadastroUser)
 app.post('/users/login', usersController.loginUser)
 app.put('/users/update', usersController.atualizarUser)
+app.delete('/users/delete/:id', usersController.deleteUsers)
 
 app.get('/bem/all', bemController.findAll)
 app.post('/bem/add', bemController.addBem)

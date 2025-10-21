@@ -3,6 +3,7 @@ import {
     Archive,
     Calendar,
     CircleUserIcon,
+    Eraser,
     EyeClosedIcon,
     EyeIcon,
     LogOutIcon,
@@ -10,7 +11,7 @@ import {
     UserPlus2,
     X,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { CONFIG } from "../../config";
 
 export function MenuTop() {
@@ -122,9 +123,9 @@ export function MenuTop() {
     return (
         <header className="w-full bg-gray-900 text-white shadow-[0_2px_6px_rgba(0,0,0,0.15)] relative z-50">
             <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-                <h1 className="text-lg font-bold tracking-wide">
+                <NavLink to="/bens" className="text-lg font-bold tracking-wide">
                     Controle Patrimonial
-                </h1>
+                </NavLink>
 
                 <button
                     className="md:hidden p-2"
@@ -156,6 +157,15 @@ export function MenuTop() {
                         >
                             <UserPlus2 />
                         </Link>
+                    )}
+                    {userType === "Administrador" && (
+                        <Link
+                            to="/delete"
+                            className="hover:text-indigo-400 transition"
+                        >
+                            <Eraser />
+                        </Link>
+
                     )}
                     <button
                         onClick={handleLogout}

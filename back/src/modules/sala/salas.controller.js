@@ -2,7 +2,7 @@ import SalasDao from './sala.dao.js'
 
 const salasDao = new SalasDao();
 
-export async function findAll ( req, res){
+export async function findAll (req, res){
     try {
         const highlight = await salasDao.findAll()
         res.json(highlight)
@@ -24,8 +24,9 @@ export async function addSala(req, res) {
 export async function deleteSala(req, res) {
     const { id } = req.params
     try {
-        const Salas = await salasDao.deleteSala(id);
-        return res.json(Salas);
+        const salasReservadasDeleted = await salasDao.deleteReservasDaSala(id);
+        const salasDeleted = await salasDao.deleteSala(id);
+        return res.json(salasDeleted);
     } catch (error) {
         console.error('Erro ao excluir Sala: ', error);
         return res.status(500).json({ erro: 'Erro ao excluir Sala' });

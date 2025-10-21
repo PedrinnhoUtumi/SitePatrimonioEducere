@@ -9,6 +9,7 @@ import {
     UserPlus2,
     LogOutIcon,
     X,
+    Eraser,
 } from "lucide-react";
 import { CONFIG } from "../../config";
 import { Link, useNavigate } from "react-router-dom";
@@ -138,6 +139,15 @@ export function Cadastro() {
                             onClick={() => setAbrirMenu(false)}
                         >
                             <UserPlus2 /> <span>Cadastrar Usuário</span>
+                        </Link>
+                    )}
+                    {userType === "Administrador" && (
+                        <Link
+                            to="/delete"
+                            className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-800 hover:text-indigo-400 transition"
+                            onClick={() => setAbrirMenu(false)}
+                        >
+                            <Eraser /> <span>Deletar</span>
                         </Link>
                     )}
                 </div>

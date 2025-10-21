@@ -208,8 +208,8 @@ export function SalasReservadasCalendar() {
 
     return (
         <div className="w-full">
-            <div className="max-w-6xl mx-auto p-6">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-4 gap-4">
+            <div className="max-w-6xl mx-auto p-6 overflow-auto" style={{ maxHeight: '700px' }}>
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-4 gap-4 overflow-auto" >
                     <div className="flex items-center gap-2">
                         <button className={`px-4 py-2 rounded ${mode === "dia" ? "bg-sky-700 text-white" : "bg-slate-100"}`} onClick={() => setMode("dia")}>Dia (horas)</button>
                         <button className={`px-4 py-2 rounded ${mode === "semana" ? "bg-sky-700 text-white" : "bg-slate-100"}`} onClick={() => setMode("semana")}>Semana</button>

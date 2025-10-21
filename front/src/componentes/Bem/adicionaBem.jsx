@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { CONFIG } from "../../config";
 import { NumericFormat } from "react-number-format";
+import { DadosContext } from "../../context/DadosContext";
 
 
-export function AdcionaBem() {
+export function AdicionaBem() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState(null);
     function dateToISO(dateStr) {
@@ -22,6 +23,8 @@ export function AdcionaBem() {
 
         return dt.toISOString();
     }
+
+    const { dados } = useContext(DadosContext);
 
     const [form, setForm] = useState({
         categoria: "Equipamentos",
@@ -298,56 +301,11 @@ export function AdcionaBem() {
                             onChange={handleChange}
                             className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
                         >
-                            <option>Prototipagem</option>
-                            <option>Arquivo morto (Subsolo)</option>
-                            <option>Sala 001 (Administrativo)</option>
-                            <option>Sala 002 (Auditório)</option>
-                            <option>Sala 003 (Magvia)</option>
-                            <option>Sala 004 (Data Center)</option>
-                            <option>Sala 005</option>
-                            <option>Sala 006</option>
-                            <option>Sala 007</option>
-                            <option>Sala 101</option>
-                            <option>Sala 102</option>
-                            <option>Sala 103</option>
-                            <option>Sala 104</option>
-                            <option>Sala 105</option>
-                            <option>Sala 106</option>
-                            <option>Sala 107 (Modelagem de negócio)</option>
-                            <option>Sala 108 (Coworking)</option>
-                            <option>Sala 109 (Planejamento)</option>
-                            <option>Sala 110 (Almoxerifado)</option>
-                            <option>Sala 111 (Sala google)</option>
-                            <option>Sala 112</option>
-                            <option>Sala 113</option>
-                            <option>Sala 114 (Estúdio)</option>
-                            <option>Sala 115</option>
-                            <option>Sala 201</option>
-                            <option>Sala 202</option>
-                            <option>Sala 203 (Lab. programação)</option>
-                            <option>Sala 203 (Sala de treinamento)</option>
-                            <option>Sala 204 (Lab. mecânica)</option>
-                            <option>Sala 205 (Lab. Eletrônica)</option>
-                            <option>Sala 206</option>
-                            <option>Sala 207</option>
-                            <option>Sala 208</option>
-                            <option>Sala 209</option>
-                            <option>Sala 210</option>
-                            <option>Sala 211</option>
-                            <option>Sala 212 (Lab. Ciências Aplicadas)</option>
-                            <option>Sala 213</option>
-                            <option>Copa Térreo</option>
-                            <option>Copa Primeiro andar</option>
-                            <option>Copa Segundo andar</option>
-                            <option>Copa Terceiro andar (Cozinha 2)</option>
-                            <option>Corredor Térreo</option>
-                            <option>Corredor Primeiro andar</option>
-                            <option>Corredor Segundo andar</option>
-                            <option>Corredor/Churrasqueira Terceiro andar</option>
-                            <option>DML Térreo</option>
-                            <option>DML Primeiro andar</option>
-                            <option>DML Segundo andar</option>
-                            <option>DML Terceiro andar</option>
+                            {dados.salas.map((sala) => (
+                                <option key={sala.id_sala} >
+                                    {sala.nome_sala}
+                                </option>
+                            ))}
                         </select>
                     </div>
 
