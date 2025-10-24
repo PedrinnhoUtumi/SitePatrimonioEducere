@@ -32,7 +32,7 @@ export function AdicionaBem() {
         data_Aquisicao: "",
         data_Baixa: "",
         justificativaBaixa: "Transferência",
-        depreciacao: "",
+        // depreciacao: "",
         valorAquisicao: "",
         valorResidual: "",
         marca: "",
@@ -68,10 +68,10 @@ export function AdicionaBem() {
             errors.push("Valor residual precisa ser menor que valor de aquisição.");
         }
 
-        const dep = parseFloat(form.depreciacao);
-        if (isNaN(dep) || dep < 0 || dep > 100) {
-            errors.push("Depreciação deve ser uma porcentagem entre 0 e 100.");
-        }
+        // const dep = parseFloat(form.depreciacao);
+        // if (isNaN(dep) || dep < 0 || dep > 100) {
+        //     errors.push("Depreciação deve ser uma porcentagem entre 0 e 100.");
+        // }
 
         return errors;
     }
@@ -92,7 +92,7 @@ export function AdicionaBem() {
             data_aquisicao: dateToISO(form.data_Aquisicao),
             data_baixa: dateToISO(form.data_Baixa),
             justificativa_baixa: form.justificativaBaixa,
-            depreciacao_percent: parseFloat(form.depreciacao),
+            depreciacao_percent: ((form.valorAquisicao - form.valorResidual) / form.valorResidual) * 100,
             valor_aquisicao: parseFloat(form.valorAquisicao),
             valor_residual: parseFloat(form.valorResidual),
             marca: form.marca,
@@ -126,7 +126,7 @@ export function AdicionaBem() {
                 data_Aquisicao: "",
                 data_Baixa: "",
                 justificativaBaixa: "Transferência",
-                depreciacao: "",
+                // depreciacao: "",
                 valorAquisicao: "",
                 valorResidual: "",
                 marca: "",
@@ -225,7 +225,7 @@ export function AdicionaBem() {
                         </select>
                     </div>
 
-                    <div>
+                    {/* <div>
                         <label className="block text-sm font-medium text-gray-700">Depreciação anual (%)</label>
                         <NumericFormat
                             value={form.depreciacao}
@@ -243,7 +243,7 @@ export function AdicionaBem() {
                             className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
                             decimalScale={2}
                         />
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className="flex flex-col gap-4">

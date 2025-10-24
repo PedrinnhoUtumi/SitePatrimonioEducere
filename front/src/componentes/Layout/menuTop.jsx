@@ -3,11 +3,11 @@ import {
     Archive,
     Calendar,
     CircleUserIcon,
-    Eraser,
     EyeClosedIcon,
     EyeIcon,
     LogOutIcon,
     Menu,
+    PencilIcon,
     UserPlus2,
     X,
 } from "lucide-react";
@@ -131,7 +131,7 @@ export function MenuTop() {
                     className="md:hidden p-2"
                     onClick={() => setMenuOpen(!menuOpen)}
                 >
-                    {menuOpen ? <X size={28} /> : <Menu size={28} />}
+                    {menuOpen ? <X size={28} className="hover:text-red-400" /> : <Menu size={28} className="hover:text-blue-400" />}
                 </button>
 
                 <nav className="hidden md:flex items-center gap-6">
@@ -163,7 +163,7 @@ export function MenuTop() {
                             to="/delete"
                             className="hover:text-indigo-400 transition"
                         >
-                            <Eraser />
+                            <PencilIcon />
                         </Link>
 
                     )}
@@ -380,6 +380,17 @@ export function MenuTop() {
                         >
                             <div className="flex items-center gap-2">
                                 <UserPlus2 size={20} /> Cadastro
+                            </div>
+                        </Link>
+                    )}
+                    {userType === "Administrador" && (
+                        <Link
+                            to="/delete"
+                            onClick={() => setMenuOpen(false)}
+                            className="hover:text-indigo-400 transition text-lg font-medium"
+                        >
+                            <div className="flex items-center gap-2">
+                                <PencilIcon size={20} /> Alterar Salas
                             </div>
                         </Link>
                     )}

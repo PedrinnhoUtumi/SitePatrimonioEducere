@@ -32,3 +32,16 @@ export async function deleteSala(req, res) {
         return res.status(500).json({ erro: 'Erro ao excluir Sala' });
     }
 }
+
+export async function updateSala(req, res) {
+    const { id } = req.params
+    const { nome_sala, tipo_sala } = req.body
+    try {
+        // const salasReservadasUpdated = await salasDao.updateReservasDaSala({nome_sala}, id);
+        const salasUpdated = await salasDao.updateSala({nome_sala, tipo_sala}, id);
+        return res.json(salasUpdated);
+    } catch (error) {
+        console.error('Erro ao editar Sala: ', error);
+        return res.status(500).json({ erro: 'Erro ao editar Sala' });
+    }
+}

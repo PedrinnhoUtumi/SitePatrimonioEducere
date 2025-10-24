@@ -13,7 +13,7 @@ export function CadastroBem() {
 
                 {selected === "Meus Bens" && <VerificaBem />}
                 {selected === "Adicionar" && <AdicionaBem />}
-                
+
             </div>
         </div>
     )

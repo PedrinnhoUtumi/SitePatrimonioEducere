@@ -3,8 +3,12 @@ import { QRCodeCanvas } from "qrcode.react";
 import SyncLoader from "react-spinners/SyncLoader";
 import { CONFIG } from "../../config";
 import { NumericFormat } from "react-number-format";
+import { useContext } from "react";
+import { DadosContext } from "../../context/DadosContext";
+import { ArrowBigDownDash, ArrowBigUp, ArrowBigUpDash, SearchIcon } from "lucide-react";
 
 export function VerificaBem() {
+    const { dados } = useContext(DadosContext)
     const [bens, setBens] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -13,6 +17,11 @@ export function VerificaBem() {
     const [editingBem, setEditingBem] = useState(null);
     const [saving, setSaving] = useState(false);
     const [processingId, setProcessingId] = useState(null);
+
+    const [sortField, setSortField] = useState(null);
+    const [sortOrder, setSortOrder] = useState("asc");
+
+    const [procura, setProcura] = useState("");
 
     const user = typeof window !== "undefined" ? JSON.parse(localStorage.getItem("user")) : null;
     const userType = user?.type ?? "Visualizador";
@@ -85,6 +94,14 @@ export function VerificaBem() {
         setEditingBem((prev) => ({ ...prev, [name]: value }));
     };
 
+    const handleSort = (field) => {
+        if (sortField === field) {
+            setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+        } else {
+            setSortField(field);
+            setSortOrder("asc");
+        }
+    };
 
     const handleSave = async () => {
         if (!editingBem) return;
@@ -92,7 +109,7 @@ export function VerificaBem() {
 
         try {
             const id = editingBem.id_bem ?? editingBem.id;
-
+            // ((valorAquisicao - valorResidual) / valorAquisicao) * 100;
             const payload = {
                 categoria: editingBem.categoria,
                 descricao_do_bem: editingBem.descricao_do_bem,
@@ -104,7 +121,8 @@ export function VerificaBem() {
                 estado_conservacao: editingBem.estado_conservacao,
                 data_aquisicao: editingBem.data_aquisicao ? new Date(editingBem.data_aquisicao).toISOString() : null,
                 data_baixa: editingBem.data_baixa ? new Date(editingBem.data_baixa).toISOString() : null,
-                depreciacao_percent: editingBem.depreciacao_percent ? Number(editingBem.depreciacao_percent) : null,
+                // depreciacao_percent: editingBem.depreciacao_percent ? Number(editingBem.depreciacao_percent) : null,
+                depreciacao_percent: ((editingBem.valor_aquisicao - editingBem.valor_residual) / editingBem.valor_aquisicao) * 100 ? Number(((editingBem.valor_aquisicao - editingBem.valor_residual) / editingBem.valor_aquisicao) * 100) : null,
                 justificativa_baixa: editingBem.justificativa_baixa,
             };
 
@@ -185,9 +203,58 @@ export function VerificaBem() {
 
     const formatDate = (iso) => (iso ? new Date(iso).toLocaleDateString() : "-");
 
+    const selectBD = bens.filter((b) => {
+        const search = procura.toLowerCase();
+        return (
+            b.descricao_do_bem?.toLowerCase().includes(search) ||
+            b.categoria?.toLowerCase().includes(search) ||
+            b.marca?.toLowerCase().includes(search) ||
+            b.localizacao_text?.toLowerCase().includes(search) ||
+            b.modelo?.toLowerCase().includes(search)
+        );
+    });
+
+const sortedData = [...selectBD].sort((a, b) => {
+    if (!sortField) return 0; 
+
+    const valA = a[sortField];
+    const valB = b[sortField];
+
+    if (valA == null && valB == null) return 0;
+    if (valA == null) return 1;
+    if (valB == null) return -1;
+
+    const dateA = new Date(valA);
+    const dateB = new Date(valB);
+    if (!isNaN(dateA) && !isNaN(dateB)) {
+        return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    }
+
+    const numA = parseFloat(valA);
+    const numB = parseFloat(valB);
+    if (!isNaN(numA) && !isNaN(numB)) {
+        return sortOrder === "asc" ? numA - numB : numB - numA;
+    }
+
+    return sortOrder === "asc"
+        ? String(valA).localeCompare(String(valB))
+        : String(valB).localeCompare(String(valA));
+});
+
     return (
         <div className="w-full px-4 py-6">
-            <div className="max-w-[1400px] mx-auto bg-white rounded-2xl p-4 shadow-[inset_0_2px_10px_rgba(0,0,0,0.08)]">
+            <div className="relative w-full mb-8">
+                <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                <input
+                    type="text"
+                    placeholder="Pesquisar por descrição, marca, categoria, localização ou modelo..."
+                    className="w-full pl-12 pr-4 py-3 rounded-2xl bg-white border border-gray-300 text-gray-800 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200"
+                    value={procura}
+                    onChange={(e) => setProcura(e.target.value)}
+                />
+            </div>
+
+            <div className="w-full mx-auto bg-white rounded-2xl p-4 shadow-[inset_0_2px_10px_rgba(0,0,0,0.08)]">
                 <h2 className="text-2xl font-semibold mb-4">Bens Cadastrados</h2>
 
                 {bens.length === 0 ? (
@@ -195,20 +262,43 @@ export function VerificaBem() {
                         Não existe bem cadastrado.
                     </p>
                 ) : (
-                    <div className="overflow-x-auto">
+                    <div className="overflow-x-auto max-w-full overflow-y-auto max-h-[60vh]">
                         <table className="min-w-full table-auto border-collapse text-sm">
                             <thead>
                                 <tr className="bg-gray-100">
-                                    <th className="px-3 py-2 border text-left">Tipo do bem</th>
+                                    <th className="px-3 py-2 border text-left min-w-[120px]" onClick={() => handleSort("categoria")}>
+                                        <div className="flex items-center gap-1">
+                                            Tipo do bem {sortField === "categoria" ? (sortOrder === "asc" ? <ArrowBigUpDash /> : <ArrowBigDownDash />) : ""}
+                                        </div>
+                                    </th>
                                     <th className="px-3 py-2 border text-left">Descrição</th>
                                     <th className="px-3 py-2 border text-left">Marca</th>
                                     <th className="px-3 py-2 border text-left">Localização</th>
-                                    <th className="px-3 py-2 border text-left">Data aquisição</th>
-                                    <th className="px-3 py-2 border text-left">Data exclusão</th>
-                                    <th className="px-3 py-2 border text-left">Depreciação</th>
+                                    <th className="px-3 py-2 border text-left" onClick={() => handleSort("data_aquisicao")}>
+                                        <div className="flex items-center gap-1">
+                                            Data aquisição {sortField === "data_aquisicao" ? (sortOrder === "asc" ? <ArrowBigUpDash /> : <ArrowBigDownDash />) : ""}
+                                        </div>                                    </th>
+                                    <th className="px-3 py-2 border text-left" onClick={() => handleSort("data_baixa")}>
+                                        <div className="flex items-center gap-1">
+                                            Data exclusão {sortField === "data_baixa" ? (sortOrder === "asc" ? <ArrowBigUpDash /> : <ArrowBigDownDash />) : ""}
+                                        </div>                                           
+                                    </th>
+                                    <th className="px-3 py-2 border text-left" onClick={() => handleSort("depreciacao_percent")}>
+                                        <div className="flex items-center gap-1">
+                                            Depreciação {sortField === "depreciacao_percent" ? (sortOrder === "asc" ? <ArrowBigUpDash /> : <ArrowBigDownDash />) : ""}
+                                        </div>                                           
+                                    </th>
                                     <th className="px-3 py-2 border text-left">Justificativa da exclusão</th>
-                                    <th className="px-3 py-2 border text-left">Valor aquisição</th>
-                                    <th className="px-3 py-2 border text-left">Valor residual</th>
+                                    <th className="px-3 py-2 border text-left" onClick={() => handleSort("valor_aquisicao")}>
+                                        <div className="flex items-center gap-1">
+                                            Valor aquisição {sortField === "valor_aquisicao" ? (sortOrder === "asc" ? <ArrowBigUpDash /> : <ArrowBigDownDash />) : ""}
+                                        </div>                                           
+                                    </th>
+                                    <th className="px-3 py-2 border text-left" onClick={() => handleSort("valor_residual")}>
+                                        <div className="flex items-center gap-1">
+                                            Valor residual {sortField === "valor_residual" ? (sortOrder === "asc" ? <ArrowBigUpDash /> : <ArrowBigDownDash />) : ""}
+                                        </div>                                           
+                                    </th>
                                     <th className="px-3 py-2 border text-left">Modelo</th>
                                     <th className="px-3 py-2 border text-left">Estado</th>
                                     <th className="px-3 py-2 border text-left">QR code</th>
@@ -219,7 +309,7 @@ export function VerificaBem() {
                             </thead>
 
                             <tbody>
-                                {bens.map((bem, idx) => {
+                                {sortedData?.map((bem, idx) => {
                                     const id = bem.id_bem ?? bem.id;
                                     const rowBg = idx % 2 === 0 ? "bg-green-50" : "bg-white";
 
@@ -333,56 +423,11 @@ export function VerificaBem() {
                                         onChange={handleChange}
                                         className="border rounded px-2 py-1"
                                     >
-                                        <option>Prototipagem</option>
-                                        <option>Arquivo morto (Subsolo)</option>
-                                        <option>Sala 001 (Administrativo)</option>
-                                        <option>Sala 002 (Auditório)</option>
-                                        <option>Sala 003 (Magvia)</option>
-                                        <option>Sala 004 (Data Center)</option>
-                                        <option>Sala 005</option>
-                                        <option>Sala 006</option>
-                                        <option>Sala 007</option>
-                                        <option>Sala 101</option>
-                                        <option>Sala 102</option>
-                                        <option>Sala 103</option>
-                                        <option>Sala 104</option>
-                                        <option>Sala 105</option>
-                                        <option>Sala 106</option>
-                                        <option>Sala 107 (Modelagem de negócio)</option>
-                                        <option>Sala 108 (Coworking)</option>
-                                        <option>Sala 109 (Planejamento)</option>
-                                        <option>Sala 110 (Almoxerifado)</option>
-                                        <option>Sala 111 (Sala google)</option>
-                                        <option>Sala 112</option>
-                                        <option>Sala 113</option>
-                                        <option>Sala 114 (Estúdio)</option>
-                                        <option>Sala 115</option>
-                                        <option>Sala 201</option>
-                                        <option>Sala 202</option>
-                                        <option>Sala 203 (Lab. programação)</option>
-                                        <option>Sala 203 (Sala de treinamento)</option>
-                                        <option>Sala 204 (Lab. mecânica)</option>
-                                        <option>Sala 205 (Lab. Eletrônica)</option>
-                                        <option>Sala 206</option>
-                                        <option>Sala 207</option>
-                                        <option>Sala 208</option>
-                                        <option>Sala 209</option>
-                                        <option>Sala 210</option>
-                                        <option>Sala 211</option>
-                                        <option>Sala 212 (Lab. Ciências Aplicadas)</option>
-                                        <option>Sala 213</option>
-                                        <option>Copa Térreo</option>
-                                        <option>Copa Primeiro andar</option>
-                                        <option>Copa Segundo andar</option>
-                                        <option>Copa Terceiro andar (Cozinha 2)</option>
-                                        <option>Corredor Térreo</option>
-                                        <option>Corredor Primeiro andar</option>
-                                        <option>Corredor Segundo andar</option>
-                                        <option>Corredor/Churrasqueira Terceiro andar</option>
-                                        <option>DML Térreo</option>
-                                        <option>DML Primeiro andar</option>
-                                        <option>DML Segundo andar</option>
-                                        <option>DML Terceiro andar</option>
+                                        {dados.salas.map((sala) => (
+                                            <option key={sala.id_sala} >
+                                                {sala.nome_sala}
+                                            </option>
+                                        ))}
                                     </select>
                                 </label>
 
@@ -435,7 +480,7 @@ export function VerificaBem() {
                                     />
                                 </label>
 
-                                <label className="flex flex-col">
+                                {/* <label className="flex flex-col">
                                     <span className="text-sm">Depreciação (%)</span>
                                     <NumericFormat
                                         value={editingBem.depreciacao_percent}
@@ -444,7 +489,7 @@ export function VerificaBem() {
                                             if (value > 100) {
                                                 value = 100;
                                             }
-                                            setEditingBem({ ...editingBem, depreciacao: value });
+                                            setEditingBem({ ...editingBem, depreciacao_percent: value });
                                         }}
                                         thousandSeparator="."
                                         decimalSeparator=","
@@ -453,7 +498,7 @@ export function VerificaBem() {
                                         className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
                                         decimalScale={2}
                                     />
-                                </label>
+                                </label> */}
 
                                 <label className="flex flex-col">
                                     <span className="text-sm">Data Aquisição</span>
