@@ -56,4 +56,16 @@ export default class SalasReservadasDao {
         if (error) throw error
         return data
     }
+
+    async updateSalas(body, id) {
+        const { data, error } = await supabase
+        .from(this.table)
+        .update([body])
+        .eq('id_reserva', id)
+        .select(); 
+
+        if (error) throw error;
+        return data[0];
+    }
+
 }

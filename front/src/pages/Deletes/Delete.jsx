@@ -112,7 +112,6 @@ export function Delete() {
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={() => openEditModal(sala)}
-                                    // onClick={() => console.log(sala)}
                                     className="text-yellow-600 hover:text-yellow-800 transition-colors"
                                     title="Editar Sala"
                                 >
@@ -162,7 +161,7 @@ export function Delete() {
 
             {isModalOpen && editingSala && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center">
-                    <div className="absolute inset-0 bg-black/50" onClick={closeModal} />
+                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closeModal} />
                     <form className="relative bg-white w-[90%] max-w-md p-6 rounded-2xl shadow-lg z-10" onSubmit={handleSave}>
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-xl font-semibold text-gray-800">Editar Sala</h2>

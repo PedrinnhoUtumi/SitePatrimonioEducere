@@ -248,7 +248,7 @@ const sortedData = [...selectBD].sort((a, b) => {
                 <input
                     type="text"
                     placeholder="Pesquisar por descrição, marca, categoria, localização ou modelo..."
-                    className="w-full pl-12 pr-4 py-3 rounded-2xl bg-white border border-gray-300 text-gray-800 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200"
+                    className="w-full pl-12 pr-4 py-3 rounded-2xl bg-white border border-gray-300 text-gray-800 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition duration-200"
                     value={procura}
                     onChange={(e) => setProcura(e.target.value)}
                 />
@@ -480,7 +480,7 @@ const sortedData = [...selectBD].sort((a, b) => {
                                     />
                                 </label>
 
-                                {/* <label className="flex flex-col">
+                                <label className="flex flex-col">
                                     <span className="text-sm">Depreciação (%)</span>
                                     <NumericFormat
                                         value={editingBem.depreciacao_percent}
@@ -498,7 +498,7 @@ const sortedData = [...selectBD].sort((a, b) => {
                                         className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
                                         decimalScale={2}
                                     />
-                                </label> */}
+                                </label>
 
                                 <label className="flex flex-col">
                                     <span className="text-sm">Data Aquisição</span>

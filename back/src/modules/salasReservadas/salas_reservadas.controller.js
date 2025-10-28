@@ -68,3 +68,16 @@ export async function addReserva(req, res) {
         return res.status(500).json({ erro: 'Erro ao adicionar reserva' })
     }
 }
+
+export async function updateSalas(req, res) {
+    const { id_reserva } = req.params
+    const { responsavel, data_inicio, data_fim, descricao, id_sala } = req.body
+    try {
+        // const salasReservadasUpdated = await salasDao.updateReservasDaSala({nome_sala}, id);
+        const salasUpdated = await salasReservadasDao.updateSalas({responsavel, data_inicio, data_fim, descricao, id_sala}, id_reserva);
+        return res.json(salasUpdated);
+    } catch (error) {
+        console.error('Erro ao editar Sala: ', error);
+        return res.status(500).json({ erro: 'Erro ao editar Sala' });
+    }
+}

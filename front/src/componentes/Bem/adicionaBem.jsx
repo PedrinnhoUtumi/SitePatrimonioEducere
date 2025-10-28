@@ -225,7 +225,7 @@ export function AdicionaBem() {
                         </select>
                     </div>
 
-                    {/* <div>
+                    <div>
                         <label className="block text-sm font-medium text-gray-700">Depreciação anual (%)</label>
                         <NumericFormat
                             value={form.depreciacao}
@@ -243,7 +243,7 @@ export function AdicionaBem() {
                             className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
                             decimalScale={2}
                         />
-                    </div> */}
+                    </div>
                 </div>
 
                 <div className="flex flex-col gap-4">

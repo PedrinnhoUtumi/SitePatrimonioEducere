@@ -45,6 +45,7 @@ app.put('/salas/update/:id', salasController.updateSala)
 app.get('/salaReservada/findSalas', salasReservadasController.findSalas)
 app.post('/salaReservada/add', salasReservadasController.addReserva)
 app.delete('/salaReservada/delete/:id_reserva', salasReservadasController.deleteSalas)
+app.put('/salaReservada/update/:id_reserva', salasReservadasController.updateSalas)
 
 app.get('/API', (req, res) => {
     res.send({ mensagem: 'API funcionando' })
