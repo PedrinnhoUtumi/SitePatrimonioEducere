@@ -205,12 +205,12 @@ export function SalasReservadasCalendar() {
 
     async function handleDelete(id_reserva) {
         try {
-            const response = await fetch(`http://localhost:3001/salaReservada/delete/${id_reserva}`, {
-                method: "DELETE",
-            })
-            // const response = await fetch(`http://patrimonio.edu:3001/usuarios/${id_reserva}`, {
+            // const response = await fetch(`http://localhost:3001/salaReservada/delete/${id_reserva}`, {
             //     method: "DELETE",
             // })
+            const response = await fetch(`${CONFIG.API_URL}/usuarios/${id_reserva}`, {
+                method: "DELETE",
+            })
 
             if (!response.ok) {
                 console.log(response)
