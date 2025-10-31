@@ -30,6 +30,7 @@ export async function cadastroUser(req, res) {
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
             photo: fileName,
+            cpf: cpf,
         };
 
         const saved = await usersDao.cadastrar(newUser);
