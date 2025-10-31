@@ -16,6 +16,9 @@ export function ReservaSala() {
     const [loading, setLoading] = useState(false);
     const [msg, setMsg] = useState(null);
 
+    const user = JSON.parse(localStorage.getItem("user"));
+    const quem_reservou = user?.nome || "Erro";
+
     const getLocalDateTime = (date = new Date()) => {
         const pad = (n) => String(n).padStart(2, "0");
         const yyyy = date.getFullYear();
@@ -91,6 +94,7 @@ export function ReservaSala() {
             end,
             descricao,
             created_at: new Date().toISOString(),
+            quem_reservou,
         };
     };
 

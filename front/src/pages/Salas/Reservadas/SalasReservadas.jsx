@@ -2,6 +2,7 @@ import { useState } from "react"
 import { BotaoSalas } from "../../../componentes/SalasReservadas/botaoSalas"
 import { ReservaSala } from "../../../componentes/SalasReservadas/reservaSala"
 import { SalasReservadasCalendar } from "../../../componentes/SalasReservadas/salasReservadas"
+import { Pagina } from "../../../componentes/Layout/Pagina"
 
 export function SalasReservadas() {
     const [selected, setSelected] = useState("Minhas Salas")
@@ -9,7 +10,7 @@ export function SalasReservadas() {
     const userTipo = user?.type || "Visualizador"
 
     return (
-        <div className="flex flex-col min-h-screen justify-between items-center">
+        <Pagina>
             <div className="flex flex-col justify-center items-center w-full">
                 <BotaoSalas onSelect={setSelected} />
 
@@ -17,6 +18,6 @@ export function SalasReservadas() {
                 {selected === "Minhas Salas" && <SalasReservadasCalendar />}
 
             </div>
-        </div>
+        </Pagina>
     )
 }

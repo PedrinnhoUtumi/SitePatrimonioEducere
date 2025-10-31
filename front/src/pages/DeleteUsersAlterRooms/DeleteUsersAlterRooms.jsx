@@ -4,7 +4,7 @@ import { CONFIG } from "../../config";
 import { DadosContext } from "../../context/DadosContext";
 import { PencilIcon, Trash, X } from "lucide-react";
 
-export function Delete() {
+export function DeleteUsersAlterRooms() {
     const [editingSala, setEditingSala] = useState(null);
     const { dados } = useContext(DadosContext);
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -99,7 +99,7 @@ export function Delete() {
 
     return (
         <Pagina>
-            <div className="max-w-lg mx-auto w-full p-4 bg-white rounded-lg shadow-md">
+            <div className="max-w-lg mx-auto w-full p-4 mt-20 bg-white rounded-lg shadow-md">
                 <h2 className="text-2xl font-semibold mb-4 text-red-600">Salas</h2>
                 <ul className="divide-y w-full divide-gray-200 overflow-y-auto" style={{ maxHeight: "350px" }}>
                     {dados.salas.map((sala) => (

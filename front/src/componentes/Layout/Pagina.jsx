@@ -4,7 +4,7 @@ export function Pagina({ children, row = false, className = "" }) {
       className={`min-h-screen flex flex-col flex-1 w-full ${className}`}
     >
       <main
-        className={`flex flex-1 justify-center items-center p-6 ${
+        className={`flex justify-center items-center ${
           row ? "flex-row" : "flex-col"
         }`}
       >

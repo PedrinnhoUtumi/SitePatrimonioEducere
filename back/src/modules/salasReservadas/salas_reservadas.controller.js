@@ -71,10 +71,9 @@ export async function addReserva(req, res) {
 
 export async function updateSalas(req, res) {
     const { id_reserva } = req.params
-    const { responsavel, data_inicio, data_fim, descricao, id_sala } = req.body
+    const { responsavel, data_inicio, data_fim, descricao, id_sala, quem_reservou } = req.body
     try {
-        // const salasReservadasUpdated = await salasDao.updateReservasDaSala({nome_sala}, id);
-        const salasUpdated = await salasReservadasDao.updateSalas({responsavel, data_inicio, data_fim, descricao, id_sala}, id_reserva);
+        const salasUpdated = await salasReservadasDao.updateSalas({responsavel, data_inicio, data_fim, descricao, id_sala, quem_reservou}, id_reserva);
         return res.json(salasUpdated);
     } catch (error) {
         console.error('Erro ao editar Sala: ', error);

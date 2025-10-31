@@ -121,8 +121,8 @@ export function VerificaBem() {
                 estado_conservacao: editingBem.estado_conservacao,
                 data_aquisicao: editingBem.data_aquisicao ? new Date(editingBem.data_aquisicao).toISOString() : null,
                 data_baixa: editingBem.data_baixa ? new Date(editingBem.data_baixa).toISOString() : null,
-                // depreciacao_percent: editingBem.depreciacao_percent ? Number(editingBem.depreciacao_percent) : null,
-                depreciacao_percent: ((editingBem.valor_aquisicao - editingBem.valor_residual) / editingBem.valor_aquisicao) * 100 ? Number(((editingBem.valor_aquisicao - editingBem.valor_residual) / editingBem.valor_aquisicao) * 100) : null,
+                depreciacao_percent: editingBem.depreciacao_percent ? Number(editingBem.depreciacao_percent) : null,
+                // depreciacao_percent: ((editingBem.valor_aquisicao - editingBem.valor_residual) / editingBem.valor_aquisicao) * 100 ? Number(((editingBem.valor_aquisicao - editingBem.valor_residual) / editingBem.valor_aquisicao) * 100) : null,
                 justificativa_baixa: editingBem.justificativa_baixa,
             };
 
@@ -214,32 +214,32 @@ export function VerificaBem() {
         );
     });
 
-const sortedData = [...selectBD].sort((a, b) => {
-    if (!sortField) return 0; 
+    const sortedData = [...selectBD].sort((a, b) => {
+        if (!sortField) return 0;
 
-    const valA = a[sortField];
-    const valB = b[sortField];
+        const valA = a[sortField];
+        const valB = b[sortField];
 
-    if (valA == null && valB == null) return 0;
-    if (valA == null) return 1;
-    if (valB == null) return -1;
+        if (valA == null && valB == null) return 0;
+        if (valA == null) return 1;
+        if (valB == null) return -1;
 
-    const dateA = new Date(valA);
-    const dateB = new Date(valB);
-    if (!isNaN(dateA) && !isNaN(dateB)) {
-        return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
-    }
+        const dateA = new Date(valA);
+        const dateB = new Date(valB);
+        if (!isNaN(dateA) && !isNaN(dateB)) {
+            return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+        }
 
-    const numA = parseFloat(valA);
-    const numB = parseFloat(valB);
-    if (!isNaN(numA) && !isNaN(numB)) {
-        return sortOrder === "asc" ? numA - numB : numB - numA;
-    }
+        const numA = parseFloat(valA);
+        const numB = parseFloat(valB);
+        if (!isNaN(numA) && !isNaN(numB)) {
+            return sortOrder === "asc" ? numA - numB : numB - numA;
+        }
 
-    return sortOrder === "asc"
-        ? String(valA).localeCompare(String(valB))
-        : String(valB).localeCompare(String(valA));
-});
+        return sortOrder === "asc"
+            ? String(valA).localeCompare(String(valB))
+            : String(valB).localeCompare(String(valA));
+    });
 
     return (
         <div className="w-full px-4 py-6">
@@ -281,23 +281,23 @@ const sortedData = [...selectBD].sort((a, b) => {
                                     <th className="px-3 py-2 border text-left" onClick={() => handleSort("data_baixa")}>
                                         <div className="flex items-center gap-1">
                                             Data exclusão {sortField === "data_baixa" ? (sortOrder === "asc" ? <ArrowBigUpDash /> : <ArrowBigDownDash />) : ""}
-                                        </div>                                           
+                                        </div>
                                     </th>
                                     <th className="px-3 py-2 border text-left" onClick={() => handleSort("depreciacao_percent")}>
                                         <div className="flex items-center gap-1">
                                             Depreciação {sortField === "depreciacao_percent" ? (sortOrder === "asc" ? <ArrowBigUpDash /> : <ArrowBigDownDash />) : ""}
-                                        </div>                                           
+                                        </div>
                                     </th>
                                     <th className="px-3 py-2 border text-left">Justificativa da exclusão</th>
                                     <th className="px-3 py-2 border text-left" onClick={() => handleSort("valor_aquisicao")}>
                                         <div className="flex items-center gap-1">
                                             Valor aquisição {sortField === "valor_aquisicao" ? (sortOrder === "asc" ? <ArrowBigUpDash /> : <ArrowBigDownDash />) : ""}
-                                        </div>                                           
+                                        </div>
                                     </th>
                                     <th className="px-3 py-2 border text-left" onClick={() => handleSort("valor_residual")}>
                                         <div className="flex items-center gap-1">
                                             Valor residual {sortField === "valor_residual" ? (sortOrder === "asc" ? <ArrowBigUpDash /> : <ArrowBigDownDash />) : ""}
-                                        </div>                                           
+                                        </div>
                                     </th>
                                     <th className="px-3 py-2 border text-left">Modelo</th>
                                     <th className="px-3 py-2 border text-left">Estado</th>
@@ -507,7 +507,17 @@ const sortedData = [...selectBD].sort((a, b) => {
                                         type="date"
                                         value={editingBem.data_aquisicao ?? ""}
                                         max={toInputDate(new Date().toISOString())}
-                                        onChange={handleChange}
+                                        min={editingBem.data_baixa ?? ""}
+                                        onChange={(e) => {
+                                            const novaDataAquisicao = e.target.value;
+                                            const dataBaixaAtual = editingBem.data_baixa;
+
+                                            if (dataBaixaAtual && novaDataAquisicao > dataBaixaAtual) {
+                                                alert("A data de aquisição não pode ser posterior à data de baixa.");
+                                                return;
+                                            }
+                                            handleChange(e);
+                                        }}
                                         className="border rounded px-2 py-1"
                                     />
                                 </label>
@@ -520,7 +530,17 @@ const sortedData = [...selectBD].sort((a, b) => {
                                         value={editingBem.data_baixa ?? ""}
                                         min={editingBem.data_aquisicao}
                                         disabled={!editingBem.data_aquisicao}
-                                        onChange={handleChange}
+                                        onChange={(e) => {
+                                            const novaDataBaixa = e.target.value;
+                                            const dataAquisicao = editingBem.data_aquisicao;
+
+                                            if (dataAquisicao && novaDataBaixa < dataAquisicao) {
+                                                alert("A data de baixa não pode ser anterior à data de aquisição.");
+                                                return;
+                                            }
+
+                                            handleChange(e);
+                                        }}
                                         className="border rounded px-2 py-1"
                                     />
                                 </label>

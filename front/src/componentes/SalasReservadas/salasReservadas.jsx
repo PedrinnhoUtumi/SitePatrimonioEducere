@@ -25,6 +25,9 @@ export function SalasReservadasCalendar() {
     const [checkResult, setCheckResult] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const user = JSON.parse(localStorage.getItem("user"));
+    const quem_reservou = user?.nome || "Erro";
+    
     function formatDateTimeLocal(dateStr) {
         if (!dateStr) return "";
         const date = new Date(dateStr);
@@ -38,7 +41,6 @@ export function SalasReservadasCalendar() {
 
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
-
 
     useEffect(() => {
         const controller = new AbortController();
@@ -230,8 +232,9 @@ export function SalasReservadasCalendar() {
         formData.append("data_inicio", editedReserva.data_inicio);
         formData.append("data_fim", editedReserva.data_fim);
         formData.append("descricao", editedReserva.descricao);
+        formData.append("quem_reservou", quem_reservou);
 
-        console.log("Edited reservation:", editedReserva);
+        console.log("Edited reservation:", formData.get("quem_reservou"));
 
 
         try {
@@ -297,7 +300,6 @@ export function SalasReservadasCalendar() {
                     </form>
                 </div>
 
-                {/* --- RESULTADO --- */}
                 {checkResult && (
                     <div className="mb-4 text-sm">
                         <strong>Resultado da verificação ({checkDate} {checkTime}):</strong>
@@ -318,14 +320,12 @@ export function SalasReservadasCalendar() {
                     </div>
                 )}
 
-                {/* --- MODAL --- */}
                 {isModalOpen && editingReserva && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center px-3">
                         <div className="absolute inset-0 bg-black/50" onClick={() => setIsModalOpen(false)} />
                         <div className="relative bg-white w-full sm:w-[90%] max-w-md sm:max-w-lg p-6 rounded-2xl shadow-lg z-10 overflow-y-auto max-h-[90vh]">
                             <h2 className="text-xl font-semibold mb-4">Editar Reserva</h2>
 
-                            {/* Campos */}
                             <div className="flex flex-col gap-3 text-sm">
                                 <label className="flex flex-col">
                                     <span className="text-gray-700">Responsável</span>
@@ -362,10 +362,22 @@ export function SalasReservadasCalendar() {
                                 </label>
                             </div>
 
-                            {/* Botões */}
-                            <div className="mt-6 flex justify-end space-x-3">
-                                <button className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition" onClick={closeModal}>Cancelar</button>
-                                <button className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition" onClick={handleSaveReserva}>Salvar</button>
+                            <div className="mt-6 flex items-center justify-end space-x-3">
+                                <button
+                                    className="ml-3 flex items-center border justify-center bg-red-600 border-red-600/0 text-white w-7 h-7 rounded-full hover:bg-white/20 hover:text-red-600 hover:border-red-600  transition-colors"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        if (window.confirm("Deseja editar esta reserva?")) {
+                                            handleDelete(editingReserva.id_reserva);
+                                            closeModal();
+                                        }
+                                    }}
+                                    title="Editar reserva"
+                                >
+                                    <Trash size={14} />
+                                </button>
+                                <button className="px-4 py-2 rounded border border-red-600/0 bg-red-600 text-white hover:bg-red-200 hover:text-red-600 hover:border-red-600 transition" onClick={closeModal}>Cancelar</button>
+                                <button className="px-4 py-2 rounded border border-blue-600/0 bg-blue-600 text-white hover:bg-blue-200 hover:text-blue-600 hover:border-blue-600 transition" onClick={handleSaveReserva}>Salvar</button>
                             </div>
                         </div>
                     </div>
@@ -424,7 +436,7 @@ export function SalasReservadasCalendar() {
                                                     return (
                                                         <div
                                                             key={resKey}
-                                                            className="absolute top-2 h-14 rounded-xl text-white text-sm flex items-center justify-between px-3 shadow-md hover:shadow-lg transition-all duration-200"
+                                                            className="absolute top-2 h-20 rounded-xl text-white text-sm flex items-center justify-between px-3 shadow-md hover:shadow-lg transition-all duration-200"
                                                             style={{
                                                                 left: style.left,
                                                                 width: style.width,
@@ -446,18 +458,7 @@ export function SalasReservadasCalendar() {
                                                             >
                                                                 <Pencil size={14} />
                                                             </button>
-                                                            <button
-                                                                className="ml-3 flex items-center justify-center w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    if (window.confirm("Deseja editar esta reserva?")) {
-                                                                        handleDelete(r.id_reserva);
-                                                                    }
-                                                                }}
-                                                                title="Editar reserva"
-                                                            >
-                                                                <Trash size={14} />
-                                                            </button>
+
                                                         </div>
                                                     );
                                                 })}

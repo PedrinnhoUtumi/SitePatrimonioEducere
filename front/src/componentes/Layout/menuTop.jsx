@@ -160,7 +160,7 @@ export function MenuTop() {
                     )}
                     {userType === "Administrador" && (
                         <Link
-                            to="/delete"
+                            to="/deleteUsersAlterRooms"
                             className="hover:text-indigo-400 transition"
                         >
                             <PencilIcon />
@@ -385,7 +385,7 @@ export function MenuTop() {
                     )}
                     {userType === "Administrador" && (
                         <Link
-                            to="/delete"
+                            to="/deleteUsersAlterRooms"
                             onClick={() => setMenuOpen(false)}
                             className="hover:text-indigo-400 transition text-lg font-medium"
                         >

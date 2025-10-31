@@ -19,7 +19,7 @@ import PaginaBem from "./pages/QRCode/BensId"
 import { NaoAutorizado } from "./pages/Extra/NaoAutorizado";
 import { PaginaNaoEncontrada } from "./pages/Extra/PaginaNaoEncontrada";
 import { Layout } from "./pages/_Layout";
-import { Delete } from "./pages/Deletes/Delete";
+import { DeleteUsersAlterRooms } from "./pages/DeleteUsersAlterRooms/DeleteUsersAlterRooms";
 import { DadosProvider } from "./context/DadosContext";
 
 const rotas = createBrowserRouter(
@@ -47,7 +47,7 @@ const rotas = createBrowserRouter(
           <Route path="/cadastroSala" element={<CadastrarSala />} />
         </Route>
         <Route element={< RotaProtegida tiposPermitidos={["Administrador"]} />}>
-          <Route path="/delete" element={<Delete />} />
+          <Route path="/deleteUsersAlterRooms" element={<DeleteUsersAlterRooms />} />
         </Route>
       </Route>
     </>
