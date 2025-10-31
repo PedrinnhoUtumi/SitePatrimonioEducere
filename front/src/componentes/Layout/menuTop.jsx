@@ -177,7 +177,7 @@ export function MenuTop() {
                     <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-gray-800 text-blue-300">
                         {userPhoto ? (
                             <img
-                                src={`http://localhost:3001/imagens/${user.photo}`}
+                                src={`${CONFIG.API_URL}/imagens/${user.photo}`}
                                 alt="Foto de perfil"
                                 className="w-8 h-8 rounded-full object-cover cursor-pointer"
                                 onClick={handleOpenEditor}
@@ -321,7 +321,7 @@ export function MenuTop() {
                                             <img
                                                 src={
                                                     previewPhoto ||
-                                                    `http://localhost:3001/imagens/${user.photo}`
+                                                    `${CONFIG.API_URL}/imagens/${user.photo}`
                                                 }
                                                 alt="Preview"
                                                 className="w-20 h-20 rounded-full object-cover border mt-2 mx-auto"
@@ -397,7 +397,7 @@ export function MenuTop() {
                     <div className="flex items-center gap-2 text-blue-300 mt-2">
                         {userPhoto ? (
                             <img
-                                src={`http://localhost:3001/imagens/${user.photo}`}
+                                src={`${CONFIG.API_URL}/imagens/${user.photo}`}
                                 alt="Foto de perfil"
                                 className="w-8 h-8 rounded-full object-cover"
                                 onClick={handleOpenEditor}
