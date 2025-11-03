@@ -276,7 +276,7 @@ export function Cadastro() {
                                 <div className="flex items-center gap-3">
                                     <input
                                         type="file"
-                                        id="upload-photo"
+                                        id="photo"
                                         accept="image/*"
                                         className="hidden"
                                         onChange={(e) => {
@@ -288,7 +288,7 @@ export function Cadastro() {
                                         }}
                                     />
                                     <label
-                                        htmlFor="upload-photo"
+                                        htmlFor="photo"
                                         className="cursor-pointer px-3 py-2 w-20 h-20 flex justify-center border hover:border-blue-600 hover:text-blue-600 items-center text-sm rounded-full bg-blue-600 hover:bg-white transition text-white"
                                     >
                                         {photoPreview ? (

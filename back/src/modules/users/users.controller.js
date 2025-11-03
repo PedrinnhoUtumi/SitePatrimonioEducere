@@ -8,12 +8,16 @@ const usersDao = new UsersDao();
 export async function cadastroUser(req, res) {
     try {
         const { senha, cpf, ...rest } = req.body;
-        const photo = req.files.photo;
+        let fileName = null;
 
-        const fileName = `${Date.now()}_${photo.name}`;
-        const uploadPath = path.join("src", "imagens", fileName);
+        if (req.files && req.files.photo) {
+            const photo = req.files.photo;
+            fileName = `${Date.now()}_${photo.name}`;
+            const uploadPath = path.join("src", "imagens", fileName);
 
-        await photo.mv(uploadPath);
+            await photo.mv(uploadPath);
+        }
+
         const valido = cpfValidate.isValid(cpf);
 
         if (!senha || !valido)
@@ -29,19 +33,19 @@ export async function cadastroUser(req, res) {
             senha_hash,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
-            photo: fileName,
+             ...(fileName && { photo: fileName }),
             cpf: cpf,
         };
-
         const saved = await usersDao.cadastrar(newUser);
         const savedUser = Array.isArray(saved) ? saved[0] : saved;
+
 
         res.status(201).json({
             message: "Usuário criado com sucesso!",
             user: savedUser,
         });
     } catch (error) {
-        console.error("Erro no cadastro:", error);
+        console.log("Erro no cadastro:", error.message);
         res.status(500).json({
             message: "Erro ao criar usuário",
             error: error.message,
@@ -51,7 +55,7 @@ export async function cadastroUser(req, res) {
 
 export async function atualizarUser(req, res) {
     try {
-        const { id, nome, cpf, rg, email, senha } = req.body;
+        const { id_user, nome, cpf, rg, email, senha } = req.body;
 
         const valido = cpfValidate.isValid(cpf);
 
@@ -78,7 +82,7 @@ export async function atualizarUser(req, res) {
             updatedData.photo = fileName;
         }
 
-        const updated = await usersDao.atualizar(updatedData, id);
+        const updated = await usersDao.atualizar(updatedData, id_user);
         const updatedUser = Array.isArray(updated) ? updated[0] : updated;
 
         res.status(200).json({

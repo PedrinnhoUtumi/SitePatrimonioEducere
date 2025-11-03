@@ -27,14 +27,14 @@ export function MenuTop() {
     const user = JSON.parse(localStorage.getItem("user"));
     const userType = user?.type || "Visualizador";
     const userName = user?.nome || "Erro";
-    const ID = user?.id;
+    const ID = user?.id_user;
     const CPF = user?.cpf;
     const RG = user?.rg;
     const email = user?.email || "Erro";
     const userPhoto = user?.photo || null;
 
     const [updatedUser, setUpdatedUser] = useState({
-        id: ID || "",
+        id_user: ID || "",
         nome: userName,
         cpf: CPF,
         rg: RG,
@@ -71,14 +71,14 @@ export function MenuTop() {
         setLoading(true);
 
         try {
-            if (!updatedUser.id) {
+            if (!updatedUser.id_user) {
                 alert("ID do usuário não definido. Recarregue a página.");
                 setLoading(false);
                 return;
             }
 
             const formData = new FormData();
-            formData.append("id", updatedUser.id);
+            formData.append("id_user", updatedUser.id_user);
             formData.append("nome", updatedUser.nome);
             formData.append("cpf", updatedUser.cpf);
             formData.append("rg", updatedUser.rg);

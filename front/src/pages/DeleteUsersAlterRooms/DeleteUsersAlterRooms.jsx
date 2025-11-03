@@ -139,12 +139,13 @@ export function DeleteUsersAlterRooms() {
                 <h2 className="text-2xl font-semibold mb-4 text-red-600">Usuários</h2>
                 <ul className="divide-y w-full divide-gray-200">
                     {dados.users
-                        .filter((user) => user.id_user !== userLogado?.id)
+                        .filter((user) => user.id_user !== userLogado?.id_user && user.cpf !== userLogado?.cpf)
                         .map((user) => (
                             <li key={user.id_user} className="flex justify-between items-center py-2">
                                 <span className="text-gray-800 font-medium">{user.nome}</span>
                                 <button
-                                    onClick={() => handleDeleteUsers(user.id_user)}
+                                    // onClick={() => handleDeleteUsers(user.id_user)}
+                                    onClick={() => console.log("usuário", user)}
                                     className="text-red-600 hover:text-red-800 transition-colors"
                                     title="Excluir Usuário"
                                 >
