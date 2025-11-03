@@ -321,7 +321,7 @@ export function SalasReservadasCalendar() {
                 )}
 
                 {isModalOpen && editingReserva && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center px-3">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center px-3 backdrop-blur-sm">
                         <div className="absolute inset-0 bg-black/50" onClick={() => setIsModalOpen(false)} />
                         <div className="relative bg-white w-full sm:w-[90%] max-w-md sm:max-w-lg p-6 rounded-2xl shadow-lg z-10 overflow-y-auto max-h-[90vh]">
                             <h2 className="text-xl font-semibold mb-4">Editar Reserva</h2>
