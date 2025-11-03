@@ -144,8 +144,8 @@ export function DeleteUsersAlterRooms() {
                             <li key={user.id_user} className="flex justify-between items-center py-2">
                                 <span className="text-gray-800 font-medium">{user.nome}</span>
                                 <button
-                                    // onClick={() => handleDeleteUsers(user.id_user)}
-                                    onClick={() => console.log("usuário", user)}
+                                    onClick={() => handleDeleteUsers(user.id_user)}
+                                    // onClick={() => console.log("usuário", user)}
                                     className="text-red-600 hover:text-red-800 transition-colors"
                                     title="Excluir Usuário"
                                 >
