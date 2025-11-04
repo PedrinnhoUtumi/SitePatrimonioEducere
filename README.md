@@ -6,17 +6,17 @@ O **Sistema de Controle Patrimonial** é uma aplicação web desenvolvida para a
 O sistema foi projetado para ser **intuitivo, seguro e responsivo**, possibilitando o acesso por diferentes tipos de usuários (administradores e visualizadores) a partir de qualquer dispositivo conectado à internet do local.
 
 ## ⚙️ Principais Funcionalidades
-🔸 Gestão de Bens Patrimoniais
+🔸 Gestão de Bens Patrimoniais;
 
-🔸 Controle de Usuários
+🔸 Controle de Usuários;
 
-🔸 Gestão de Localização
+🔸 Gestão de Localização;
 
-🔸 Histórico e Auditoria
+🔸 Histórico e Auditoria;
 
-🔸 Busca e Filtragem Avançadas
+🔸 Busca e Filtragem Avançadas;
 
-🔸 Geração de QRCode com informações
+🔸 Geração de QRCode com informações.
 
 ## 💻 Tecnologias Utilizadas
 🔸 ![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=000000)
@@ -26,6 +26,12 @@ O sistema foi projetado para ser **intuitivo, seguro e responsivo**, possibilita
 🔸 ![Supabase](https://img.shields.io/badge/-Supabase-0d0d0d?style=flat&logo=supabase&logoColor=3ECF8E)
 
 🔸 ![TailwindCss](https://img.shields.io/badge/-TailwindCSS-ffffff?style=flat&logo=TailwindCss&logoColor=06b6d4)
+
+🔸 ![Express](https://img.shields.io/badge/-Express-f9f9f9?style=flat&logo=express&logoColor=0d0d0d)
+
+🔸 ![NodeMailer](https://img.shields.io/badge/-NodeMailer-0d0107?style=flat&logo=gmail&logoColor=fdfdf)
+
+🔸 ![Node.js](https://img.shields.io/badge/-Node.js-215732?style=flat&logo=node.js&logoColor=44883e)
 
 ## 📊 Benefícios
 🔸 Redução de falhas e retrabalho no controle de bens;
@@ -38,8 +44,11 @@ O sistema foi projetado para ser **intuitivo, seguro e responsivo**, possibilita
 
 🔸 Transparência e rastreabilidade nas movimentações de bens.
 
+## 👥 Integrantes do projeto
+
+
 | Integrante          | GitHub                                               | Principais Contribuições                                                                                          |
 | ------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | 🧩 **Sara Guaiume** | [saraqwe123](https://github.com/saraqwe123) | Responsável pela versão alpha do projeto |
-| 🎨 **Bruno Pena**  | [brunpena](https://github.com/brunpena/) | Responsável pelo início da versão que, posteriormente, seria a versão utilizada |
+| 🎨 **Bruno Pena**  | [brunpena](https://github.com/brunpena/) | Responsável pelo início da versão que, posteriormente, seria a versão oficial |
 | ⚙️ **Pedro Utumi**  | [PedrinnhoUtumi](https://github.com/PedrinnhoUtumi/) | Responsável pela refatoração e término do projeto |

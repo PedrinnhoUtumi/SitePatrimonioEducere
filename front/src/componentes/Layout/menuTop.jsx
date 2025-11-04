@@ -122,9 +122,9 @@ export function MenuTop() {
 
     return (
         <header className="w-full bg-gray-900 text-white shadow-[0_2px_6px_rgba(0,0,0,0.15)] relative z-50">
-            <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
                 <NavLink to="/bens" className="text-lg font-bold tracking-wide">
-                    Controle Patrimonial
+                    <img src="/image.png" alt="" className="w-56 h-18 sm:w-full sm:h-24" />
                 </NavLink>
 
                 <button
@@ -174,7 +174,7 @@ export function MenuTop() {
                     >
                         <LogOutIcon />
                     </button>
-                    <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-gray-800 text-blue-300">
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-800 text-blue-300">
                         {userPhoto ? (
                             <img
                                 src={`${CONFIG.API_URL}/imagens/${user.photo}`}
