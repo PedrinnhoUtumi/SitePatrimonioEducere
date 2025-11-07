@@ -208,7 +208,7 @@ export function SalasReservadasCalendar() {
             // const response = await fetch(`http://localhost:3001/salaReservada/delete/${id_reserva}`, {
             //     method: "DELETE",
             // })
-            const response = await fetch(`${CONFIG.API_URL}/usuarios/${id_reserva}`, {
+            const response = await fetch(`${CONFIG.API_URL}/salaReservada/delete/${id_reserva}`, {
                 method: "DELETE",
             })
 
@@ -367,12 +367,12 @@ export function SalasReservadasCalendar() {
                                     className="ml-3 flex items-center border justify-center bg-red-600 border-red-600/0 text-white w-7 h-7 rounded-full hover:bg-white/20 hover:text-red-600 hover:border-red-600  transition-colors"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        if (window.confirm("Deseja editar esta reserva?")) {
+                                        if (window.confirm("Deseja deletar esta reserva?")) {
                                             handleDelete(editingReserva.id_reserva);
                                             closeModal();
                                         }
                                     }}
-                                    title="Editar reserva"
+                                    title="deletar reserva"
                                 >
                                     <Trash size={14} />
                                 </button>
