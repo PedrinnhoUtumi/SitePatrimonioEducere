@@ -17,37 +17,57 @@
 #       - backend
 #     restart: always
 
+# version: '3.9'
+
+# services:
+#   backend:
+#     build: ./back
+#     container_name: apiPatriMaster
+#     ports:
+#       - "3001:3001" 
+#     environment:
+#       - HOST=0.0.0.0
+#     env_file:
+#       - ./back/.env
+#     restart: always
+
+#   frontend:
+#     build: ./front
+#     container_name: PatriMaster
+#     environment:
+#       - HOST=0.0.0.0
+#     restart: always
+
+#   nginx:
+#     image: nginx:latest
+#     container_name: nginxPatrimonio
+#     ports:
+#       - "80:80"
+#     environment:
+#       - HOST=0.0.0.0
+#     volumes:
+#       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+#     depends_on:
+#       - frontend
+#       - backend
+#     restart: always
+
 version: '3.9'
 
 services:
   backend:
     build: ./back
     container_name: apiPatriMaster
-    ports:
-      - "3001:3001" 
+    network_mode: "host"
     environment:
-      - HOST=0.0.0.0
-    env_file:
-      - ./back/.env
+      - NODE_ENV=production
     restart: always
 
   frontend:
     build: ./front
     container_name: PatriMaster
+    network_mode: "host"
     environment:
+      - NODE_ENV=production
       - HOST=0.0.0.0
-    restart: always
-
-  nginx:
-    image: nginx:latest
-    container_name: nginxPatrimonio
-    ports:
-      - "80:80"
-    environment:
-      - HOST=0.0.0.0
-    volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-    depends_on:
-      - frontend
-      - backend
     restart: always
