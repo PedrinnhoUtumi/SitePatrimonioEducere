@@ -68,8 +68,5 @@ services:
     build: ./front
     container_name: PatriMaster
     ports:
-      - "80:80"
-    environment:
-      - NODE_ENV=production
-      - HOST=0.0.0.0
+      - "8080:80"   # container ouve porta 80, host usa 8080
     restart: always
