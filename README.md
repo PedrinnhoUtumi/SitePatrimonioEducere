@@ -29,8 +29,6 @@ O sistema foi projetado para ser **intuitivo, seguro e responsivo**, possibilita
 
 🔸 ![Express](https://img.shields.io/badge/-Express-f9f9f9?style=flat&logo=express&logoColor=0d0d0d)
 
-🔸 ![NodeMailer](https://img.shields.io/badge/-NodeMailer-0d0107?style=flat&logo=gmail&logoColor=fdfdf)
-
 🔸 ![Node.js](https://img.shields.io/badge/-Node.js-215732?style=flat&logo=node.js&logoColor=44883e)
 
 ## 📊 Benefícios
@@ -43,6 +41,19 @@ O sistema foi projetado para ser **intuitivo, seguro e responsivo**, possibilita
 🔸 Melhor planejamento de manutenção de ativos;
 
 🔸 Transparência e rastreabilidade nas movimentações de bens.
+
+## 🐋 Como rodar no Docker Desktop?
+🔸 Primeiramente, dê commit nas alterações (via Github Desktop ou comandos git);
+
+🔸 Em seguida, vá para o computador host (que "libera" o patrimonio.edu) e abra o repositório onde está o Site (SitePatrimonioEdu) no VS Code ou terminal;
+
+🔸 Certifique-se que o push está dado e que você está mexendo na versão mais recente do código;
+
+🔸 Como estamos usando o docker-compose.yml, no terminal (Seja VS Code ou terminal do sistema), certifique de que está aberto na pasta correta e rode o seguinte comando:
+
+```bash
+docker compose build
+```
 
 ## 👥 Integrantes do projeto
 
