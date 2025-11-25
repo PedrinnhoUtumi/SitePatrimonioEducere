@@ -8,5 +8,7 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 80,
     allowedHosts: ["0.0.0.0", "localhost", "patrimonio.edu"],
+    historyApiFallback: true
+
 }
 })
