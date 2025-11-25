@@ -5,7 +5,8 @@ export default class SalasDao {
         this.table = 'sala'
     }
 
-    async findAll() {
+    async 
+    findAll() {
         const { data, error } = await supabase
             .from(this.table)
             .select('*')

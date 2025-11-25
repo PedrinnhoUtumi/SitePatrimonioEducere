@@ -7,7 +7,7 @@ export async function findAll (req, res){
         const highlight = await salasDao.findAll()
         res.json(highlight)
     } catch (error) {
-        console.error('erro ao buscar Destaques: ', err)
+        console.error('erro ao buscar Destaques: ', error)
         res.status(500).json({erro: 'erro ao buscar destaques'})
     }
 }
