@@ -52,7 +52,7 @@ O sistema foi projetado para ser **intuitivo, seguro e responsivo**, possibilita
 🔸 Como estamos usando o docker-compose.yml, no terminal (Seja VS Code ou terminal do sistema), certifique de que está aberto na pasta correta e rode o seguinte comando:
 
 ```bash
-docker compose build
+$ docker compose up --build -d
 ```
 
 ## 👥 Integrantes do projeto
