@@ -58,7 +58,8 @@ services:
   backend:
     build: ./back
     container_name: apiPatriMaster
-    network_mode: "host"
+    ports:
+      - "3001:3001"
     environment:
       - NODE_ENV=production
     restart: always
@@ -66,7 +67,8 @@ services:
   frontend:
     build: ./front
     container_name: PatriMaster
-    network_mode: "host"
+    ports:
+      - "80:80"
     environment:
       - NODE_ENV=production
       - HOST=0.0.0.0
