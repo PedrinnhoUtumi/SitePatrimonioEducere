@@ -42,6 +42,30 @@ O sistema foi projetado para ser **intuitivo, seguro e responsivo**, possibilita
 
 🔸 Transparência e rastreabilidade nas movimentações de bens.
 
+## 🐋 Pré-Requisitos
+🔸 Instale o Node.js na sua máquina para nenhuma falha nesse link [Node.js](https://nodejs.org/pt/download) (opte por npm);
+
+🔸 instale o docker desktop nesse link [Docker](https://docs.docker.com/desktop/setup/install/windows-install/);
+
+🔸 Ao abrir o projeto em seu editor terminal, confirme que o node está instalado com;
+
+```powershell
+$ node --version
+```
+
+🔸 Em seguida, instale todas as dependencias de back e frontend;
+
+```powershell
+$ cd back
+$ npm i
+$ cd ../front
+$ npm i
+$ cd ..
+$ npm i
+```
+
+🔸 Como estamos usando o docker-compose.yml, no terminal (Seja VS Code ou terminal do sistema), certifique de que está aberto na pasta correta e rode o seguinte comando:
+
 ## 🐋 Como rodar no Docker Desktop?
 🔸 Primeiramente, dê commit nas alterações (via Github Desktop ou comandos git);
 
@@ -49,10 +73,15 @@ O sistema foi projetado para ser **intuitivo, seguro e responsivo**, possibilita
 
 🔸 Certifique-se que o push está dado e que você está mexendo na versão mais recente do código;
 
-🔸 Como estamos usando o docker-compose.yml, no terminal (Seja VS Code ou terminal do sistema), certifique de que está aberto na pasta correta e rode o seguinte comando:
+🔸 Como estamos usando o docker-compose.yml, no terminal (Seja VS Code ou terminal do sistema), certifique de que está aberto na pasta correta e rode o seguinte comando(Para alteração):
 
 ```bash
 $ docker compose up --build -d
+```
+🔸 Como estamos usando o docker-compose.yml, no terminal (Seja VS Code ou terminal do sistema), certifique de que está aberto na pasta correta e rode o seguinte comando(Para subir projeto):
+
+```bash
+$ docker compose up
 ```
 
 ## 👥 Integrantes do projeto
