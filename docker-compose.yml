@@ -68,5 +68,5 @@ services:
     build: ./front
     container_name: PatriMaster
     ports:
-      - "8080:80"   # container ouve porta 80, host usa 8080
+      - "80:80"   # container ouve porta 80, host usa 8080
     restart: always
