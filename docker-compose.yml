@@ -19,7 +19,7 @@ services:
     image: nginx:latest
     container_name: nginxPatrimonio
     ports:
-      - "81:80"   # HOST 81 → CONTAINER 80 (NGINX)
+      - "81:81"   # HOST 81 → CONTAINER 80 (NGINX)
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
