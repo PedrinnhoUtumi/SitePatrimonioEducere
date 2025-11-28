@@ -70,3 +70,11 @@ services:
     ports:
       - "80:80"   # container ouve porta 80, host usa 8080
     restart: always
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "81:81"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./dist:/usr/share/nginx/html
