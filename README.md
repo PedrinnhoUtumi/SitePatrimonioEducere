@@ -42,7 +42,7 @@ O sistema foi projetado para ser **intuitivo, seguro e responsivo**, possibilita
 
 🔸 Transparência e rastreabilidade nas movimentações de bens.
 
-## 🐋 Pré-Requisitos
+## 🔒 Pré-Requisitos
 🔸 Instale o Node.js na sua máquina para nenhuma falha nesse link [Node.js](https://nodejs.org/pt/download) (opte por npm);
 
 🔸 instale o docker desktop nesse link [Docker](https://docs.docker.com/desktop/setup/install/windows-install/);
